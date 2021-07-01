@@ -1,0 +1,42 @@
+14:12:14 **** Incremental Build of configuration Debug for project week8 ****
+make -j3 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'I2C':
+../Core/Src/main.c:550:17: warning: unused variable 'pdataStart' [-Wunused-variable]
+  550 |  static uint8_t pdataStart[1] = {0x45};
+      |                 ^~~~~~~~~~
+../Core/Src/main.c:549:16: warning: unused variable 'laserAddress' [-Wunused-variable]
+  549 |  const uint8_t laserAddress = 0x23<<1;
+      |                ^~~~~~~~~~~~
+../Core/Src/main.c: In function 'trajectory':
+../Core/Src/main.c:596:15: warning: unused variable 'a5' [-Wunused-variable]
+  596 |  static float a5 = 0;
+      |               ^~
+../Core/Src/main.c:595:15: warning: unused variable 'a4' [-Wunused-variable]
+  595 |  static float a4 = 0;
+      |               ^~
+At top level:
+../Core/Src/main.c:595:15: warning: 'a4' defined but not used [-Wunused-variable]
+../Core/Src/main.c:596:15: warning: 'a5' defined but not used [-Wunused-variable]
+  596 |  static float a5 = 0;
+      |               ^~
+../Core/Src/main.c:550:17: warning: 'pdataStart' defined but not used [-Wunused-variable]
+  550 |  static uint8_t pdataStart[1] = {0x45};
+      |                 ^~~~~~~~~~
+arm-none-eabi-gcc -o "week8.elf" @"objects.list"   -mcpu=cortex-m4 -T"/Users/amejiyopakapak/Documents/GitHub/ProjectY2T2/week8/week8/week8/STM32F411RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="week8.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: week8.elf
+ 
+arm-none-eabi-objdump -h -S  week8.elf  > "week8.list"
+arm-none-eabi-objcopy  -O binary  week8.elf  "week8.bin"
+arm-none-eabi-size   week8.elf 
+   text	   data	    bss	    dec	    hex	filename
+  32828	    172	   2216	  35216	   8990	week8.elf
+Finished building: default.size.stdout
+ 
+Finished building: week8.bin
+ 
+Finished building: week8.list
+ 
+
+14:12:16 Build Finished. 0 errors, 7 warnings. (took 1s.224ms)
+

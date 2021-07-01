@@ -78,10 +78,13 @@ uint16_t dt = 10000;
 uint64_t TimeOutputLoop = 0;
 uint64_t Timestamp = 0;
 float vMax = 10;
-uint16_t Kp = 250;
-float Ki = 2.5;
-uint16_t Kd = 200;
-uint16_t k = 5000;
+uint16_t Kp = 0;
+float Ki = 0;
+uint16_t Kd = 0;
+uint16_t Kp_p = 0;
+float Ki_p = 0;
+uint16_t Kd_p = 0;
+uint16_t k = 0;
 float R = 0.2;
 float Gl = 10;
 static float tF = 0;
@@ -113,7 +116,8 @@ static void MX_I2C1_Init(void);
 uint64_t micros();
 #define  HTIM_ENCODER htim1
 float EncoderVelocity_Update();
-void pidVelocity();
+void pidPosition();
+void piVelocity();
 void trajectory(uint64_t);
 void kalman();
 void gotoSethome();
@@ -183,17 +187,7 @@ int main(void)
 			Timestamp = micros();
 			trajectory(Timestamp);
 			kalman();
-			pidVelocity();
-			if(velocity < 0){
-				HAL_GPIO_WritePin(GPIOB, GPIO_PIN_8, SET);
-				HAL_GPIO_WritePin(GPIOB, GPIO_PIN_9, RESET);
-			}
-			else if (velocity > 0){
-				HAL_GPIO_WritePin(GPIOB, GPIO_PIN_9, SET);
-				HAL_GPIO_WritePin(GPIOB, GPIO_PIN_8, RESET);
-			}
-			htim3.Instance->CCR1 = abs(PWMOut);
-			state[1] = state[0];
+			pidPosition();
 		}
 
 	}
@@ -568,7 +562,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin){
 void I2C(){
 	const uint8_t laserAddress = 0x23<<1;
 	static uint8_t pdataStart[1] = {0x45};
-	HAL_I2C_Master_Transmit_IT(&hi2c1, laserAddress, pdataStart, 1);
+//	HAL_I2C_Master_Transmit_IT(&hi2c1, laserAddress, pdataStart, 1);
 }
 
 float EncoderVelocity_Update()
@@ -628,29 +622,10 @@ void trajectory(uint64_t Timestamp){
 		cP = 0;
 	}
 	currentPosition = rawPosition[0] + cP*90;
-	if(abs(finalAngle-startAngle)<10){
-		vMax = 5;
-		k = 1000;
-	}
-	else if (abs(finalAngle-startAngle)<50){
-		vMax = 5;
-		k = 2000;
-	}
-	else{
-		vMax = 8;
-		k = 2000;
-		if(abs(finalAngle-startAngle)>200){
-			vMax = 10;
-			k = 5000;
-		}
-	}
 	if(state[0] == 1){
 		if(state[0] != state[1]){
 			setTime = Timestamp;
 			startAngle = currentPosition;
-//			if(abs(finalAngle-startAngle) > 200 ){
-//				storeAngle = 10;
-//			}
 		}
 		tim = (float) (Timestamp-setTime)/1000000;
 		tF = (float) (250*abs(finalAngle-startAngle-storeAngle)/(355*vMax));
@@ -671,13 +646,13 @@ void trajectory(uint64_t Timestamp){
 	rawPosition[1] = rawPosition[0];
 }
 
-void pidVelocity(){
+void pidPosition(){
 	static float error = 0;
 	static float integral = 0;
 	static float derivative = 0;
 	error = abs(velocity) - abs(EncoderVel);
 	integral = integral+error;
-	PWMOut = k + Kp*error + Ki*integral +Kd*(error-derivative);
+	PWMOut = k + Kp_p*error + Ki_p*integral +Kd_p*(error-derivative);
 	derivative = error;
 	if (abs(PWMOut) > 10000){
 		PWMOut = 10000;
@@ -691,6 +666,35 @@ void pidVelocity(){
 	}
 }
 
+void piVelocity(){
+	static float error = 0;
+		static float integral = 0;
+		static float derivative = 0;
+		error = abs(velocity) - abs(EncoderVel);
+		integral = integral+error;
+		PWMOut = k + Kp*error + Ki*integral +Kd*(error-derivative);
+		derivative = error;
+		if (abs(PWMOut) > 10000){
+			PWMOut = 10000;
+		}
+
+		if (velocity == 0){
+			PWMOut = 0;
+			error = 0;
+			integral = 0;
+			derivative = 0;
+		}
+		if(velocity < 0){
+				HAL_GPIO_WritePin(GPIOB, GPIO_PIN_8, SET);
+				HAL_GPIO_WritePin(GPIOB, GPIO_PIN_9, RESET);
+			}
+			else if (velocity > 0){
+				HAL_GPIO_WritePin(GPIOB, GPIO_PIN_9, SET);
+				HAL_GPIO_WritePin(GPIOB, GPIO_PIN_8, RESET);
+			}
+			htim3.Instance->CCR1 = abs(PWMOut);
+			state[1] = state[0];
+}
 void gotoSethome(){
 	if (SetHome == 1){
 		velocity = 3;
