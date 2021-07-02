@@ -61,8 +61,8 @@ all: main-build
 main-build: week8.elf secondary-outputs
 
 # Tool invocations
-week8.elf: $(OBJS) $(USER_OBJS) /Users/amejiyopakapak/Documents/GitHub/ProjectY2T2/week8/week8/week8/STM32F411RETX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "week8.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"/Users/amejiyopakapak/Documents/GitHub/ProjectY2T2/week8/week8/week8/STM32F411RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="week8.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+week8.elf: $(OBJS) $(USER_OBJS) C:\Users\army_\OneDrive\Documents\GitHub\ProjectY2T2\week8\week8\week8\STM32F411RETX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "week8.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\army_\OneDrive\Documents\GitHub\ProjectY2T2\week8\week8\week8\STM32F411RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="week8.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
