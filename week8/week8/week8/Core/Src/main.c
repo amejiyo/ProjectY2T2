@@ -597,10 +597,10 @@ void trajectory(uint64_t Timestamp){
 	static uint64_t setTime = 0;
 	state[0] = start;
 	rawPosition[0] = (float)HTIM_ENCODER.Instance->CNT*90/2048;
-	if((rawPosition[0] < 10 )&& (rawPosition[1] > 87)){
+	if((rawPosition[0] < 10 )&& (rawPosition[1] > 80)){
 		cP += 1;
 	}
-	else if ((rawPosition[0] >87 )&& (rawPosition[1] < 10)){
+	else if ((rawPosition[0] > 80 )&& (rawPosition[1] < 10)){
 		cP -= 1;
 	}
 	if (cP > 3){
@@ -610,6 +610,7 @@ void trajectory(uint64_t Timestamp){
 		cP = 0;
 	}
 	currentPosition = (float)rawPosition[0] + cP*90;
+	K = 0;
 	if(state[0] == 1){
 		if(state[0] != state[1]){
 			setTime = Timestamp;
@@ -644,8 +645,8 @@ void trajectory(uint64_t Timestamp){
 			//		calculatedVelocity = (float) a1+ 2*a2*tim + 3*a3*pow(tim,2) + 4*a4*pow(tim,3) + 5*a5*pow(tim,4);
 			//		alpha = (float) a2 + 6*a3*tim + 12*a4*pow(tim,2) + 20*a5*pow(tim,3);
 		}
-		if ((abs(currentPosition - finalAngle) < 8)){
-			check =0;
+		if(abs(currentPosition - finalAngle) < 8){
+			K =2000;
 			if(velocity < 0){
 				velocity = -1;
 			}
@@ -662,7 +663,7 @@ void trajectory(uint64_t Timestamp){
 			}
 		}
 		else{
-			check = 1;
+			K = 1000;
 			pidPosition();
 		}
 		piVelocity();
@@ -697,17 +698,10 @@ void piVelocity(){
 	static float error = 0;
 	static float integral = 0;
 	static float derivative = 0;
-	if(velocity != 0){
-		//		if(EncoderVel == 0){
-		//			PWMOut = k;
-		//		}
-		//		else{
 		error = abs(velocity) - abs(EncoderVel);
 		integral = integral+error;
 		PWMOut = K + Kp*error + Ki*integral +Kd*(error-derivative);
 		derivative = error;
-		//		}
-	}
 	if (abs(PWMOut) > 10000){
 		PWMOut = 10000;
 	}

@@ -2077,3 +2077,38 @@
 2021-07-01 17:11:58,574 [INFO] LogOutputStream:76 - [STDOUT_REDIRECT] ***WARNING: Display must be created on main thread due to Cocoa restrictions. Use vmarg -XstartOnFirstThread
 2021-07-01 17:11:58,587 [INFO] LogOutputStream:76 - [STDOUT_REDIRECT] ***WARNING: Display must be created on main thread due to Cocoa restrictions. Use vmarg -XstartOnFirstThread
 2021-07-01 17:11:58,595 [INFO] LogOutputStream:76 - [STDOUT_REDIRECT] ***WARNING: Display must be created on main thread due to Cocoa restrictions. Use vmarg -XstartOnFirstThread
+2021-07-02 16:41:02,131 [INFO] Activator:170 - 
+
+
+2021-07-02 16:41:02,135 [INFO] Activator:171 - !SESSION log4j initialized
+2021-07-02 16:41:13,103 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] [Fatal Error] :22:3: The element type "meta" must be terminated by the matching end-tag "</meta>".
+2021-07-02 16:41:13,105 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] 
+2021-07-02 16:41:13,118 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] [Fatal Error] :22:3: The element type "meta" must be terminated by the matching end-tag "</meta>".
+2021-07-02 16:41:13,118 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] 
+2021-07-02 16:41:13,132 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] [Fatal Error] :22:3: The element type "meta" must be terminated by the matching end-tag "</meta>".
+2021-07-02 16:41:13,133 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] 
+2021-07-02 16:41:14,178 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] 
+2021-07-02 16:48:15,127 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] [Fatal Error] :22:3: The element type "meta" must be terminated by the matching end-tag "</meta>".
+2021-07-02 16:48:15,128 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] 
+2021-07-02 16:48:15,144 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] [Fatal Error] :22:3: The element type "meta" must be terminated by the matching end-tag "</meta>".
+2021-07-02 16:48:15,145 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] 
+2021-07-02 16:48:15,226 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] [Fatal Error] :22:3: The element type "meta" must be terminated by the matching end-tag "</meta>".
+2021-07-02 16:48:15,234 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] 
+2021-07-02 16:48:15,682 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] [Fatal Error] :22:3: The element type "meta" must be terminated by the matching end-tag "</meta>".
+2021-07-02 16:48:15,683 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] 
+2021-07-02 16:48:15,731 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] [Fatal Error] :22:3: The element type "meta" must be terminated by the matching end-tag "</meta>".
+2021-07-02 16:48:15,732 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] 
+2021-07-02 16:48:15,754 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] [Fatal Error] :22:3: The element type "meta" must be terminated by the matching end-tag "</meta>".
+2021-07-02 16:48:15,760 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] 
+2021-07-02 16:49:19,611 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] [Fatal Error] :22:3: The element type "meta" must be terminated by the matching end-tag "</meta>".
+2021-07-02 16:49:19,613 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] 
+2021-07-02 16:49:19,648 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] [Fatal Error] :22:3: The element type "meta" must be terminated by the matching end-tag "</meta>".
+2021-07-02 16:49:19,649 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] 
+2021-07-02 16:49:19,687 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] [Fatal Error] :22:3: The element type "meta" must be terminated by the matching end-tag "</meta>".
+2021-07-02 16:49:19,688 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] 
+2021-07-02 16:55:45,744 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] [Fatal Error] :22:3: The element type "meta" must be terminated by the matching end-tag "</meta>".
+2021-07-02 16:55:45,745 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] 
+2021-07-02 16:55:45,757 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] [Fatal Error] :22:3: The element type "meta" must be terminated by the matching end-tag "</meta>".
+2021-07-02 16:55:45,758 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] 
+2021-07-02 16:55:45,776 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] [Fatal Error] :22:3: The element type "meta" must be terminated by the matching end-tag "</meta>".
+2021-07-02 16:55:45,776 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] 

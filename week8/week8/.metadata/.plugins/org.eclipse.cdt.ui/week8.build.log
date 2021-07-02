@@ -1,4 +1,4 @@
-14:12:14 **** Incremental Build of configuration Debug for project week8 ****
+19:33:52 **** Incremental Build of configuration Debug for project week8 ****
 make -j3 all 
 arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
 ../Core/Src/main.c: In function 'I2C':
@@ -30,7 +30,7 @@ arm-none-eabi-objdump -h -S  week8.elf  > "week8.list"
 arm-none-eabi-objcopy  -O binary  week8.elf  "week8.bin"
 arm-none-eabi-size   week8.elf 
    text	   data	    bss	    dec	    hex	filename
-  32828	    172	   2216	  35216	   8990	week8.elf
+  32836	    172	   2216	  35224	   8998	week8.elf
 Finished building: default.size.stdout
  
 Finished building: week8.bin
@@ -38,5 +38,5 @@ Finished building: week8.bin
 Finished building: week8.list
  
 
-14:12:16 Build Finished. 0 errors, 7 warnings. (took 1s.224ms)
+19:33:53 Build Finished. 0 errors, 7 warnings. (took 1s.343ms)
 
