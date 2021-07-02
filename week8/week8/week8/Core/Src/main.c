@@ -1022,21 +1022,6 @@ void DynamixelProtocal2(uint8_t *Memory, uint8_t MotorID, int16_t dataIn,
 				State = S_idle;
 				break;
 			}
-			case 998:
-			{
-				if(start == 0)
-				{
-					MODE = 999;
-				}
-				break;
-			}
-			case 999 :
-			{
-				uint8_t temp2[] = {0x46,0x6E};
-				UARTTxWrite(uart, temp2, 2);
-				State = S_idle ;
-				break;
-			}
 			case 0b1100: //12
 			{
 				uint8_t temp[] = {0x58,0x75};
