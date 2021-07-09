@@ -8,3 +8,8 @@ setTime
 state
 check
 currentPosition
+K
+vMax
+SetHome
+EncoderVel
+checkI2C

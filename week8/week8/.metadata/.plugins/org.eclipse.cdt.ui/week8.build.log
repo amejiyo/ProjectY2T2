@@ -1,28 +1,119 @@
-19:33:52 **** Incremental Build of configuration Debug for project week8 ****
+13:58:12 **** Incremental Build of configuration Debug for project week8 ****
 make -j3 all 
-arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
-../Core/Src/main.c: In function 'I2C':
-../Core/Src/main.c:550:17: warning: unused variable 'pdataStart' [-Wunused-variable]
-  550 |  static uint8_t pdataStart[1] = {0x45};
-      |                 ^~~~~~~~~~
-../Core/Src/main.c:549:16: warning: unused variable 'laserAddress' [-Wunused-variable]
-  549 |  const uint8_t laserAddress = 0x23<<1;
-      |                ^~~~~~~~~~~~
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Drivers/CMSIS/Include -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'UARTTxWrite':
+../Core/Src/main.c:760:2: warning: implicit declaration of function 'memcpy' [-Wimplicit-function-declaration]
+  760 |  memcpy(&(uart->TxBuffer[uart->TxHead]), pData, numberOfdataCanCopy);
+      |  ^~~~~~
+../Core/Src/main.c:760:2: warning: incompatible implicit declaration of built-in function 'memcpy'
+../Core/Src/main.c:27:1: note: include '<string.h>' or provide a declaration of 'memcpy'
+   26 | #include <stdlib.h>
+  +++ |+#include <string.h>
+   27 | /* USER CODE END Includes */
+../Core/Src/main.c: In function 'DynamixelProtocal2':
+../Core/Src/main.c:801:3: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  801 |   if ((dataIn &0xFF) == 0x75)
+      |   ^~
+../Core/Src/main.c:803:4: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+  803 |    State = S_idle ;
+      |    ^~~~~
+../Core/Src/main.c:795:2: warning: enumeration value 'S_Start' not handled in switch [-Wswitch]
+  795 |  switch (State)
+      |  ^~~~~~
+../Core/Src/main.c:795:2: warning: enumeration value 'S_Mode' not handled in switch [-Wswitch]
+../Core/Src/main.c:795:2: warning: enumeration value 'S_Mode_1' not handled in switch [-Wswitch]
+../Core/Src/main.c:795:2: warning: enumeration value 'S_Mode_2' not handled in switch [-Wswitch]
+../Core/Src/main.c:795:2: warning: enumeration value 'S_Mode_3' not handled in switch [-Wswitch]
+../Core/Src/main.c:795:2: warning: enumeration value 'S_Mode_4' not handled in switch [-Wswitch]
+../Core/Src/main.c:795:2: warning: enumeration value 'S_Mode_5' not handled in switch [-Wswitch]
+../Core/Src/main.c:795:2: warning: enumeration value 'S_Mode_6' not handled in switch [-Wswitch]
+../Core/Src/main.c:795:2: warning: enumeration value 'S_Mode_7' not handled in switch [-Wswitch]
+../Core/Src/main.c:795:2: warning: enumeration value 'S_Mode_8' not handled in switch [-Wswitch]
+../Core/Src/main.c:795:2: warning: enumeration value 'S_Mode_9' not handled in switch [-Wswitch]
+../Core/Src/main.c:795:2: warning: enumeration value 'S_Mode_10' not handled in switch [-Wswitch]
+../Core/Src/main.c:795:2: warning: enumeration value 'S_Mode_11' not handled in switch [-Wswitch]
+../Core/Src/main.c:795:2: warning: enumeration value 'S_Mode_12' not handled in switch [-Wswitch]
+../Core/Src/main.c:795:2: warning: enumeration value 'S_Mode_13' not handled in switch [-Wswitch]
+../Core/Src/main.c:795:2: warning: enumeration value 'S_Mode_14' not handled in switch [-Wswitch]
+../Core/Src/main.c:795:2: warning: enumeration value 'S_Frame3_DataFrame_1' not handled in switch [-Wswitch]
+../Core/Src/main.c:795:2: warning: enumeration value 'S_Checksum2_4' not handled in switch [-Wswitch]
+../Core/Src/main.c:795:2: warning: enumeration value 'S_Checksum2_5' not handled in switch [-Wswitch]
+../Core/Src/main.c:795:2: warning: enumeration value 'S_error' not handled in switch [-Wswitch]
+../Core/Src/main.c:795:2: warning: enumeration value 'S_SendACK' not handled in switch [-Wswitch]
+../Core/Src/main.c:795:2: warning: enumeration value 'DNMXP_idle' not handled in switch [-Wswitch]
+../Core/Src/main.c:795:2: warning: enumeration value 'DNMXP_1stHeader' not handled in switch [-Wswitch]
+../Core/Src/main.c:795:2: warning: enumeration value 'DNMXP_2ndHeader' not handled in switch [-Wswitch]
+../Core/Src/main.c:795:2: warning: enumeration value 'DNMXP_3rdHeader' not handled in switch [-Wswitch]
+../Core/Src/main.c:795:2: warning: enumeration value 'DNMXP_Reserved' not handled in switch [-Wswitch]
+../Core/Src/main.c:795:2: warning: enumeration value 'DNMXP_ID' not handled in switch [-Wswitch]
+../Core/Src/main.c:795:2: warning: enumeration value 'DNMXP_LEN1' not handled in switch [-Wswitch]
+../Core/Src/main.c:795:2: warning: enumeration value 'DNMXP_LEN2' not handled in switch [-Wswitch]
+../Core/Src/main.c:795:2: warning: enumeration value 'DNMXP_Inst' not handled in switch [-Wswitch]
+../Core/Src/main.c:795:2: warning: enumeration value 'DNMXP_ParameterCollect' not handled in switch [-Wswitch]
+../Core/Src/main.c:795:2: warning: enumeration value 'DNMXP_CRCAndExecute' not handled in switch [-Wswitch]
+../Core/Src/main.c:787:18: warning: unused variable 'CRC_accum' [-Wunused-variable]
+  787 |  static uint16_t CRC_accum;
+      |                  ^~~~~~~~~
+../Core/Src/main.c:786:18: warning: unused variable 'packetSize' [-Wunused-variable]
+  786 |  static uint16_t packetSize = 0;
+      |                  ^~~~~~~~~~
+../Core/Src/main.c:785:18: warning: unused variable 'CRCCheck' [-Wunused-variable]
+  785 |  static uint16_t CRCCheck = 0;
+      |                  ^~~~~~~~
+../Core/Src/main.c:783:17: warning: unused variable 'parameter' [-Wunused-variable]
+  783 |  static uint8_t parameter[256] =
+      |                 ^~~~~~~~~
+../Core/Src/main.c:782:17: warning: unused variable 'inst' [-Wunused-variable]
+  782 |  static uint8_t inst = 0;
+      |                 ^~~~
+../Core/Src/main.c:780:18: warning: unused variable 'datalen' [-Wunused-variable]
+  780 |  static uint16_t datalen = 0;
+      |                  ^~~~~~~
 ../Core/Src/main.c: In function 'trajectory':
-../Core/Src/main.c:596:15: warning: unused variable 'a5' [-Wunused-variable]
-  596 |  static float a5 = 0;
+../Core/Src/main.c:1194:15: warning: unused variable 'a5' [-Wunused-variable]
+ 1194 |  static float a5 = 0;
       |               ^~
-../Core/Src/main.c:595:15: warning: unused variable 'a4' [-Wunused-variable]
-  595 |  static float a4 = 0;
+../Core/Src/main.c:1193:15: warning: unused variable 'a4' [-Wunused-variable]
+ 1193 |  static float a4 = 0;
       |               ^~
 At top level:
-../Core/Src/main.c:595:15: warning: 'a4' defined but not used [-Wunused-variable]
-../Core/Src/main.c:596:15: warning: 'a5' defined but not used [-Wunused-variable]
-  596 |  static float a5 = 0;
+../Core/Src/main.c:1193:15: warning: 'a4' defined but not used [-Wunused-variable]
+../Core/Src/main.c:1194:15: warning: 'a5' defined but not used [-Wunused-variable]
+ 1194 |  static float a5 = 0;
       |               ^~
-../Core/Src/main.c:550:17: warning: 'pdataStart' defined but not used [-Wunused-variable]
-  550 |  static uint8_t pdataStart[1] = {0x45};
-      |                 ^~~~~~~~~~
+../Core/Src/main.c:780:18: warning: 'datalen' defined but not used [-Wunused-variable]
+  780 |  static uint16_t datalen = 0;
+      |                  ^~~~~~~
+../Core/Src/main.c:782:17: warning: 'inst' defined but not used [-Wunused-variable]
+  782 |  static uint8_t inst = 0;
+      |                 ^~~~
+../Core/Src/main.c:783:17: warning: 'parameter' defined but not used [-Wunused-variable]
+  783 |  static uint8_t parameter[256] =
+      |                 ^~~~~~~~~
+../Core/Src/main.c:785:18: warning: 'CRCCheck' defined but not used [-Wunused-variable]
+  785 |  static uint16_t CRCCheck = 0;
+      |                  ^~~~~~~~
+../Core/Src/main.c:786:18: warning: 'packetSize' defined but not used [-Wunused-variable]
+  786 |  static uint16_t packetSize = 0;
+      |                  ^~~~~~~~~~
+../Core/Src/main.c:787:18: warning: 'CRC_accum' defined but not used [-Wunused-variable]
+  787 |  static uint16_t CRC_accum;
+      |                  ^~~~~~~~~
+../Core/Src/main.c:89:17: warning: 'Endeffecter' defined but not used [-Wunused-variable]
+   89 | static uint16_t Endeffecter = 0;
+      |                 ^~~~~~~~~~~
+../Core/Src/main.c:88:16: warning: 'GO' defined but not used [-Wunused-variable]
+   88 | static uint8_t GO = 0;
+      |                ^~
+../Core/Src/main.c:83:17: warning: 'STATEJUMP' defined but not used [-Wunused-variable]
+   83 | static uint16_t STATEJUMP = 0;
+      |                 ^~~~~~~~~
+../Core/Src/main.c:82:17: warning: 'JUMP' defined but not used [-Wunused-variable]
+   82 | static uint16_t JUMP = 0;
+      |                 ^~~~
+../Core/Src/main.c:80:16: warning: 'DATAFRAME_4' defined but not used [-Wunused-variable]
+   80 | static uint8_t DATAFRAME_4 [256] = { 0 };
+      |                ^~~~~~~~~~~
 arm-none-eabi-gcc -o "week8.elf" @"objects.list"   -mcpu=cortex-m4 -T"/Users/amejiyopakapak/Documents/GitHub/ProjectY2T2/week8/week8/week8/STM32F411RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="week8.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 Finished building target: week8.elf
  
@@ -30,7 +121,7 @@ arm-none-eabi-objdump -h -S  week8.elf  > "week8.list"
 arm-none-eabi-objcopy  -O binary  week8.elf  "week8.bin"
 arm-none-eabi-size   week8.elf 
    text	   data	    bss	    dec	    hex	filename
-  32836	    172	   2216	  35224	   8998	week8.elf
+  38940	    176	   2456	  41572	   a264	week8.elf
 Finished building: default.size.stdout
  
 Finished building: week8.bin
@@ -38,5 +129,5 @@ Finished building: week8.bin
 Finished building: week8.list
  
 
-19:33:53 Build Finished. 0 errors, 7 warnings. (took 1s.343ms)
+13:58:14 Build Finished. 0 errors, 56 warnings. (took 2s.507ms)
 
