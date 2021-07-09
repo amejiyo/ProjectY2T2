@@ -371,10 +371,10 @@ class Ui_MainWindow(object):
         abp2=int.from_bytes(apb[-1:],'big')
         self.Accel.setText("Angular Position :" + str(ap))
         nocheck=[149,abp1,abp2]
-        # ser.write([149,apb[:1],apb[-1:],self.checksum(nocheck)[0]])
-        # while(ser.readline()!='\x58\x75'):
-        #     pass
-        print([149,apb[:1],apb[-1:],self.checksum(nocheck)[0]])
+        ser.write([149,apb[:1],apb[-1:],self.checksum(nocheck)[0]])
+        while(ser.readline()!='\x58\x75'):
+            pass
+        # print([149,apb[:1],apb[-1:],self.checksum(nocheck)[0]])
 
     def sendsta(self):
         mulsta=self.manualstation.text()
