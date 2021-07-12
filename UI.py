@@ -5,12 +5,13 @@ from PyQt5.QtCore import QTimer
 import random
 
 
-# ser = serial.Serial('COM4',512000,parity='E',stopbits=1,timeout=3) #when using serial only
-ser=serial.Serial() #when not using serial. Switch to the mode above when using serial
+ser = serial.Serial('/dev/cu.usbmodem141103',512000,parity='E',stopbits=1,timeout=3) #when using serial only
+# ser=serial.Serial() #when not using serial. Switch to the mode above when using serial
 
 TenStations=[1,5,18,25,36,50,54,60,62,70] #config the stations 
 frame2station=0
 checksum=0
+
 ##################################################################################################################################
 #calculation
 ##################################################################################################################################
@@ -56,6 +57,11 @@ x10 = round(270-(cos10*200))
 y10 = round(250+(sin10*200))
 
 class Ui_MainWindow(object):
+    def __init__(self):
+        super().__init__()
+        self.runTime = 0;
+        self.timeUnit = 0;
+
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.setEnabled(True)
@@ -225,7 +231,7 @@ class Ui_MainWindow(object):
         self.label.setWordWrap(False)
         self.label.setObjectName("label")
 ##################################################################################################################################
-#button
+#button (station)
 ##################################################################################################################################
         self.b1 = QtWidgets.QPushButton(self.centralwidget)
         self.b1.setGeometry(QtCore.QRect(y1, x1, 21, 21))
@@ -357,25 +363,36 @@ class Ui_MainWindow(object):
         else:
             av=self.manualav.text()
         self.Velo.setText("Angular Velocity :" + str(av)+" rpm")
-        nocheck=[149,int(av)]
+        nocheck=[148,int(av)]
         ser.write([148,0,int(av),self.checksum(nocheck)[0]])
-        while(ser.readline()!='\x58\x75'):
+        print([148,0,int(av),self.checksum(nocheck)[0]])
+        if (ser.readline()==b'\x58\x75'):
+            print("Mode4 Done")
+        else :
+            print("Mode4 F")
             pass
-        # print([148,int(av),self.checksum(nocheck)[0]])
+    # print([148,int(av),self.checksum(nocheck)[0]])
 
     #send angular position
     def sendaa(self):
         ap=self.manualaa.text()
-        apb=int(ap).to_bytes(2,'big')
-        abp1=int.from_bytes(apb[:1],'big')
-        abp2=int.from_bytes(apb[-1:],'big')
+        # apb=int(ap).to_bytes(2,'big')
+        # abp1=int.from_bytes(apb[:1],'big')
+        # abp2=int.from_bytes(apb[-1:],'big')
         self.Accel.setText("Angular Position :" + str(ap))
-        nocheck=[149,abp1,abp2]
-        ser.write([149,apb[:1],apb[-1:],self.checksum(nocheck)[0]])
-        while(ser.readline()!='\x58\x75'):
+        nocheck=[149,0,int(ap)]
+        # print(apb[:1],apb[-1:])
+        ser.write([149,00,int(ap),self.checksum(nocheck)[0]])
+        # print([149,apb[:1],apb[-1:],self.checksum(nocheck)[0]])
+        if (ser.readline()==b'\x58\x75'):
+            print("Mode5 Done")
+        else :
+            print("Mode5 F")
             pass
+        print([149,00,ap,self.checksum(nocheck)[0]])
         # print([149,apb[:1],apb[-1:],self.checksum(nocheck)[0]])
 
+    #set station
     def sendsta(self):
         mulsta=self.manualstation.text()
         sometemplist=mulsta.split(",")
@@ -386,49 +403,89 @@ class Ui_MainWindow(object):
                 nooneknow.append(int(whatisthis))
             nooneknow.append(self.checksum(nooneknow)[0])
             ser.write(nooneknow)
-            while(ser.readline()!='\x58\x75'):
+            if (ser.readline()==b'\x58\x75'):
+                print("Mode7 Done")
+            else :
+                print("Mode7 F")
                 pass
-            # print(nooneknow)
+            print(nooneknow)
+        elif len(sometemplist)==1:
+            nocheck=[150,int(sometemplist[0])]
+            ser.write([150,0,int(sometemplist[0]),self.checksum(nocheck)[0]])
+            if (ser.readline()==b'\x58\x75'):
+                print("Mode6 Done")
+            else:
+                print("Mode6 F")
+                pass
+            print([150,int(sometemplist[0]),self.checksum(nocheck)[0]])
         elif len(sometemplist)==1:
             nocheck=[150,int(sometemplist[0])]
             ser.write([150,0,int(sometemplist[0]),self.checksum(nocheck)[0]])
             while(ser.readline()!='\x58\x75'):
+                self.timeUnit = 1;
+                if(self.runTime == 100):
+                    break
                 pass
+            self.timeUnit = 0;
+            self.runTime = 0;
             # print([150,int(sometemplist[0]),self.checksum(nocheck)[0]])
-
+    #enable gripper
     def gron(self):
         ser.write([156,self.checksum([156])[0]])
-        while(ser.readline()!='\x58\x75'):
+        if (ser.readline()==b'\x58\x75'):
+            print("Mode12 Done")
+        else :
+            print("Mode12 F")
             pass
         self.GripperStatus.setText("Status : On")
+    
+    #disable gripper
     def grof(self):
         ser.write([157,self.checksum([157])[0]])
-        while(ser.readline()!='\x58\x75'):
+        if (ser.readline()==b'\x58\x75'):
+            print("Mode13 Done")
+        else :
+            print("Mode13 F")
             pass
         self.GripperStatus.setText("Status : Off")
+
+    #connect to board
     def botcon(self):
         ser.write([146,self.checksum([146])[0]])
-        while(ser.readline()!='\x58\x75'):
+        if (ser.readline() == b'\x58\x75'):
+            print("Mode2 Done")
+        else :
+            print("Mode2 F")       
             pass
+        # while(ser.readline()!=b'\x58\x75'):
+
+    #idsconnect to board
     def botdcon(self):
         ser.write([147,self.checksum([147])[0]])
-        while(ser.readline()!='\x58\x75'):
+        if (ser.readline()==b'\x58\x75'):
+            print("Mode3 Done")
+        else :
+            print("Mode3 F")
             pass
 
+    #set home
     def gohome(self):
-        ser.write([158,self.checksum([158])[0]])
-        while(ser.readline()!='\x58\x75'):
+        if (ser.readline()==b'\x58\x75'):
+            print("Mode14 Done")
+        else :
+            print("Mode14 F")
             pass
 
+    #go button
     def gogosta(self):
         ser.write([152,self.checksum([152])[0]])
-        while(ser.readline()!='\x58\x75'):
+        while(ser.readline()!=b'\x58\x75'):
             pass
-        while(ser.readline()!='\x46\x6E'):
+        while(ser.readline()!=b'\x46\x6E'):
             pass
         
-        
-    def bb1(self):        
+ #create station       
+    def bb1(self):
         nocheck=[150,1]
         ser.write([150,0,1,self.checksum(nocheck)[0]])
         while(ser.readline()!='\x58\x75'):
@@ -480,7 +537,6 @@ class Ui_MainWindow(object):
             pass
 
     def timer_function(self):
-        # print("1sec")
         pass
 
             #uncomment these lines when using serial

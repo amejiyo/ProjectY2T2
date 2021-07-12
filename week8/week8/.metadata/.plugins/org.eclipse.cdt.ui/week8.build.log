@@ -1,103 +1,110 @@
-13:58:12 **** Incremental Build of configuration Debug for project week8 ****
+11:40:12 **** Incremental Build of configuration Debug for project week8 ****
 make -j3 all 
 arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Drivers/CMSIS/Include -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
 ../Core/Src/main.c: In function 'UARTTxWrite':
-../Core/Src/main.c:760:2: warning: implicit declaration of function 'memcpy' [-Wimplicit-function-declaration]
-  760 |  memcpy(&(uart->TxBuffer[uart->TxHead]), pData, numberOfdataCanCopy);
+../Core/Src/main.c:774:2: warning: implicit declaration of function 'memcpy' [-Wimplicit-function-declaration]
+  774 |  memcpy(&(uart->TxBuffer[uart->TxHead]), pData, numberOfdataCanCopy);
       |  ^~~~~~
-../Core/Src/main.c:760:2: warning: incompatible implicit declaration of built-in function 'memcpy'
+../Core/Src/main.c:774:2: warning: incompatible implicit declaration of built-in function 'memcpy'
 ../Core/Src/main.c:27:1: note: include '<string.h>' or provide a declaration of 'memcpy'
    26 | #include <stdlib.h>
   +++ |+#include <string.h>
    27 | /* USER CODE END Includes */
 ../Core/Src/main.c: In function 'DynamixelProtocal2':
-../Core/Src/main.c:801:3: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
-  801 |   if ((dataIn &0xFF) == 0x75)
-      |   ^~
-../Core/Src/main.c:803:4: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
-  803 |    State = S_idle ;
-      |    ^~~~~
-../Core/Src/main.c:795:2: warning: enumeration value 'S_Start' not handled in switch [-Wswitch]
-  795 |  switch (State)
+../Core/Src/main.c:809:2: warning: enumeration value 'S_Start' not handled in switch [-Wswitch]
+  809 |  switch (State)
       |  ^~~~~~
-../Core/Src/main.c:795:2: warning: enumeration value 'S_Mode' not handled in switch [-Wswitch]
-../Core/Src/main.c:795:2: warning: enumeration value 'S_Mode_1' not handled in switch [-Wswitch]
-../Core/Src/main.c:795:2: warning: enumeration value 'S_Mode_2' not handled in switch [-Wswitch]
-../Core/Src/main.c:795:2: warning: enumeration value 'S_Mode_3' not handled in switch [-Wswitch]
-../Core/Src/main.c:795:2: warning: enumeration value 'S_Mode_4' not handled in switch [-Wswitch]
-../Core/Src/main.c:795:2: warning: enumeration value 'S_Mode_5' not handled in switch [-Wswitch]
-../Core/Src/main.c:795:2: warning: enumeration value 'S_Mode_6' not handled in switch [-Wswitch]
-../Core/Src/main.c:795:2: warning: enumeration value 'S_Mode_7' not handled in switch [-Wswitch]
-../Core/Src/main.c:795:2: warning: enumeration value 'S_Mode_8' not handled in switch [-Wswitch]
-../Core/Src/main.c:795:2: warning: enumeration value 'S_Mode_9' not handled in switch [-Wswitch]
-../Core/Src/main.c:795:2: warning: enumeration value 'S_Mode_10' not handled in switch [-Wswitch]
-../Core/Src/main.c:795:2: warning: enumeration value 'S_Mode_11' not handled in switch [-Wswitch]
-../Core/Src/main.c:795:2: warning: enumeration value 'S_Mode_12' not handled in switch [-Wswitch]
-../Core/Src/main.c:795:2: warning: enumeration value 'S_Mode_13' not handled in switch [-Wswitch]
-../Core/Src/main.c:795:2: warning: enumeration value 'S_Mode_14' not handled in switch [-Wswitch]
-../Core/Src/main.c:795:2: warning: enumeration value 'S_Frame3_DataFrame_1' not handled in switch [-Wswitch]
-../Core/Src/main.c:795:2: warning: enumeration value 'S_Checksum2_4' not handled in switch [-Wswitch]
-../Core/Src/main.c:795:2: warning: enumeration value 'S_Checksum2_5' not handled in switch [-Wswitch]
-../Core/Src/main.c:795:2: warning: enumeration value 'S_error' not handled in switch [-Wswitch]
-../Core/Src/main.c:795:2: warning: enumeration value 'S_SendACK' not handled in switch [-Wswitch]
-../Core/Src/main.c:795:2: warning: enumeration value 'DNMXP_idle' not handled in switch [-Wswitch]
-../Core/Src/main.c:795:2: warning: enumeration value 'DNMXP_1stHeader' not handled in switch [-Wswitch]
-../Core/Src/main.c:795:2: warning: enumeration value 'DNMXP_2ndHeader' not handled in switch [-Wswitch]
-../Core/Src/main.c:795:2: warning: enumeration value 'DNMXP_3rdHeader' not handled in switch [-Wswitch]
-../Core/Src/main.c:795:2: warning: enumeration value 'DNMXP_Reserved' not handled in switch [-Wswitch]
-../Core/Src/main.c:795:2: warning: enumeration value 'DNMXP_ID' not handled in switch [-Wswitch]
-../Core/Src/main.c:795:2: warning: enumeration value 'DNMXP_LEN1' not handled in switch [-Wswitch]
-../Core/Src/main.c:795:2: warning: enumeration value 'DNMXP_LEN2' not handled in switch [-Wswitch]
-../Core/Src/main.c:795:2: warning: enumeration value 'DNMXP_Inst' not handled in switch [-Wswitch]
-../Core/Src/main.c:795:2: warning: enumeration value 'DNMXP_ParameterCollect' not handled in switch [-Wswitch]
-../Core/Src/main.c:795:2: warning: enumeration value 'DNMXP_CRCAndExecute' not handled in switch [-Wswitch]
-../Core/Src/main.c:787:18: warning: unused variable 'CRC_accum' [-Wunused-variable]
-  787 |  static uint16_t CRC_accum;
+../Core/Src/main.c:809:2: warning: enumeration value 'S_Mode' not handled in switch [-Wswitch]
+../Core/Src/main.c:809:2: warning: enumeration value 'S_Mode_1' not handled in switch [-Wswitch]
+../Core/Src/main.c:809:2: warning: enumeration value 'S_Mode_2' not handled in switch [-Wswitch]
+../Core/Src/main.c:809:2: warning: enumeration value 'S_Mode_3' not handled in switch [-Wswitch]
+../Core/Src/main.c:809:2: warning: enumeration value 'S_Mode_4' not handled in switch [-Wswitch]
+../Core/Src/main.c:809:2: warning: enumeration value 'S_Mode_5' not handled in switch [-Wswitch]
+../Core/Src/main.c:809:2: warning: enumeration value 'S_Mode_6' not handled in switch [-Wswitch]
+../Core/Src/main.c:809:2: warning: enumeration value 'S_Mode_7' not handled in switch [-Wswitch]
+../Core/Src/main.c:809:2: warning: enumeration value 'S_Mode_8' not handled in switch [-Wswitch]
+../Core/Src/main.c:809:2: warning: enumeration value 'S_Mode_9' not handled in switch [-Wswitch]
+../Core/Src/main.c:809:2: warning: enumeration value 'S_Mode_10' not handled in switch [-Wswitch]
+../Core/Src/main.c:809:2: warning: enumeration value 'S_Mode_11' not handled in switch [-Wswitch]
+../Core/Src/main.c:809:2: warning: enumeration value 'S_Mode_12' not handled in switch [-Wswitch]
+../Core/Src/main.c:809:2: warning: enumeration value 'S_Mode_13' not handled in switch [-Wswitch]
+../Core/Src/main.c:809:2: warning: enumeration value 'S_Mode_14' not handled in switch [-Wswitch]
+../Core/Src/main.c:809:2: warning: enumeration value 'S_Frame3_DataFrame_1' not handled in switch [-Wswitch]
+../Core/Src/main.c:809:2: warning: enumeration value 'S_Checksum2_4' not handled in switch [-Wswitch]
+../Core/Src/main.c:809:2: warning: enumeration value 'S_Checksum2_5' not handled in switch [-Wswitch]
+../Core/Src/main.c:809:2: warning: enumeration value 'S_error' not handled in switch [-Wswitch]
+../Core/Src/main.c:809:2: warning: enumeration value 'S_SendACK' not handled in switch [-Wswitch]
+../Core/Src/main.c:809:2: warning: enumeration value 'DNMXP_idle' not handled in switch [-Wswitch]
+../Core/Src/main.c:809:2: warning: enumeration value 'DNMXP_1stHeader' not handled in switch [-Wswitch]
+../Core/Src/main.c:809:2: warning: enumeration value 'DNMXP_2ndHeader' not handled in switch [-Wswitch]
+../Core/Src/main.c:809:2: warning: enumeration value 'DNMXP_3rdHeader' not handled in switch [-Wswitch]
+../Core/Src/main.c:809:2: warning: enumeration value 'DNMXP_Reserved' not handled in switch [-Wswitch]
+../Core/Src/main.c:809:2: warning: enumeration value 'DNMXP_ID' not handled in switch [-Wswitch]
+../Core/Src/main.c:809:2: warning: enumeration value 'DNMXP_LEN1' not handled in switch [-Wswitch]
+../Core/Src/main.c:809:2: warning: enumeration value 'DNMXP_LEN2' not handled in switch [-Wswitch]
+../Core/Src/main.c:809:2: warning: enumeration value 'DNMXP_Inst' not handled in switch [-Wswitch]
+../Core/Src/main.c:809:2: warning: enumeration value 'DNMXP_ParameterCollect' not handled in switch [-Wswitch]
+../Core/Src/main.c:809:2: warning: enumeration value 'DNMXP_CRCAndExecute' not handled in switch [-Wswitch]
+../Core/Src/main.c:801:18: warning: unused variable 'CRC_accum' [-Wunused-variable]
+  801 |  static uint16_t CRC_accum;
       |                  ^~~~~~~~~
-../Core/Src/main.c:786:18: warning: unused variable 'packetSize' [-Wunused-variable]
-  786 |  static uint16_t packetSize = 0;
+../Core/Src/main.c:800:18: warning: unused variable 'packetSize' [-Wunused-variable]
+  800 |  static uint16_t packetSize = 0;
       |                  ^~~~~~~~~~
-../Core/Src/main.c:785:18: warning: unused variable 'CRCCheck' [-Wunused-variable]
-  785 |  static uint16_t CRCCheck = 0;
+../Core/Src/main.c:799:18: warning: unused variable 'CRCCheck' [-Wunused-variable]
+  799 |  static uint16_t CRCCheck = 0;
       |                  ^~~~~~~~
-../Core/Src/main.c:783:17: warning: unused variable 'parameter' [-Wunused-variable]
-  783 |  static uint8_t parameter[256] =
+../Core/Src/main.c:797:17: warning: unused variable 'parameter' [-Wunused-variable]
+  797 |  static uint8_t parameter[256] =
       |                 ^~~~~~~~~
-../Core/Src/main.c:782:17: warning: unused variable 'inst' [-Wunused-variable]
-  782 |  static uint8_t inst = 0;
+../Core/Src/main.c:796:17: warning: unused variable 'inst' [-Wunused-variable]
+  796 |  static uint8_t inst = 0;
       |                 ^~~~
-../Core/Src/main.c:780:18: warning: unused variable 'datalen' [-Wunused-variable]
-  780 |  static uint16_t datalen = 0;
+../Core/Src/main.c:794:18: warning: unused variable 'datalen' [-Wunused-variable]
+  794 |  static uint16_t datalen = 0;
       |                  ^~~~~~~
+../Core/Src/main.c: In function 'I2CprepareRead':
+../Core/Src/main.c:1166:9: warning: 'return' with a value, in function returning void [-Wreturn-type]
+ 1166 |  return status;
+      |         ^~~~~~
+../Core/Src/main.c:1158:6: note: declared here
+ 1158 | void I2CprepareRead(){
+      |      ^~~~~~~~~~~~~~
 ../Core/Src/main.c: In function 'trajectory':
-../Core/Src/main.c:1194:15: warning: unused variable 'a5' [-Wunused-variable]
- 1194 |  static float a5 = 0;
+../Core/Src/main.c:1229:15: warning: unused variable 'a5' [-Wunused-variable]
+ 1229 |  static float a5 = 0;
       |               ^~
-../Core/Src/main.c:1193:15: warning: unused variable 'a4' [-Wunused-variable]
- 1193 |  static float a4 = 0;
+../Core/Src/main.c:1228:15: warning: unused variable 'a4' [-Wunused-variable]
+ 1228 |  static float a4 = 0;
       |               ^~
+../Core/Src/main.c: In function 'findingPosition':
+../Core/Src/main.c:1185:1: warning: control reaches end of non-void function [-Wreturn-type]
+ 1185 | }
+      | ^
 At top level:
-../Core/Src/main.c:1193:15: warning: 'a4' defined but not used [-Wunused-variable]
-../Core/Src/main.c:1194:15: warning: 'a5' defined but not used [-Wunused-variable]
- 1194 |  static float a5 = 0;
+../Core/Src/main.c:1228:15: warning: 'a4' defined but not used [-Wunused-variable]
+ 1228 |  static float a4 = 0;
       |               ^~
-../Core/Src/main.c:780:18: warning: 'datalen' defined but not used [-Wunused-variable]
-  780 |  static uint16_t datalen = 0;
+../Core/Src/main.c:1229:15: warning: 'a5' defined but not used [-Wunused-variable]
+ 1229 |  static float a5 = 0;
+      |               ^~
+../Core/Src/main.c:794:18: warning: 'datalen' defined but not used [-Wunused-variable]
+  794 |  static uint16_t datalen = 0;
       |                  ^~~~~~~
-../Core/Src/main.c:782:17: warning: 'inst' defined but not used [-Wunused-variable]
-  782 |  static uint8_t inst = 0;
+../Core/Src/main.c:796:17: warning: 'inst' defined but not used [-Wunused-variable]
+  796 |  static uint8_t inst = 0;
       |                 ^~~~
-../Core/Src/main.c:783:17: warning: 'parameter' defined but not used [-Wunused-variable]
-  783 |  static uint8_t parameter[256] =
+../Core/Src/main.c:797:17: warning: 'parameter' defined but not used [-Wunused-variable]
+  797 |  static uint8_t parameter[256] =
       |                 ^~~~~~~~~
-../Core/Src/main.c:785:18: warning: 'CRCCheck' defined but not used [-Wunused-variable]
-  785 |  static uint16_t CRCCheck = 0;
+../Core/Src/main.c:799:18: warning: 'CRCCheck' defined but not used [-Wunused-variable]
+  799 |  static uint16_t CRCCheck = 0;
       |                  ^~~~~~~~
-../Core/Src/main.c:786:18: warning: 'packetSize' defined but not used [-Wunused-variable]
-  786 |  static uint16_t packetSize = 0;
+../Core/Src/main.c:800:18: warning: 'packetSize' defined but not used [-Wunused-variable]
+  800 |  static uint16_t packetSize = 0;
       |                  ^~~~~~~~~~
-../Core/Src/main.c:787:18: warning: 'CRC_accum' defined but not used [-Wunused-variable]
-  787 |  static uint16_t CRC_accum;
+../Core/Src/main.c:801:18: warning: 'CRC_accum' defined but not used [-Wunused-variable]
+  801 |  static uint16_t CRC_accum;
       |                  ^~~~~~~~~
 ../Core/Src/main.c:89:17: warning: 'Endeffecter' defined but not used [-Wunused-variable]
    89 | static uint16_t Endeffecter = 0;
@@ -121,7 +128,7 @@ arm-none-eabi-objdump -h -S  week8.elf  > "week8.list"
 arm-none-eabi-objcopy  -O binary  week8.elf  "week8.bin"
 arm-none-eabi-size   week8.elf 
    text	   data	    bss	    dec	    hex	filename
-  38940	    176	   2456	  41572	   a264	week8.elf
+  42012	    176	   4056	  46244	   b4a4	week8.elf
 Finished building: default.size.stdout
  
 Finished building: week8.bin
@@ -129,5 +136,5 @@ Finished building: week8.bin
 Finished building: week8.list
  
 
-13:58:14 Build Finished. 0 errors, 56 warnings. (took 2s.507ms)
+11:40:14 Build Finished. 0 errors, 57 warnings. (took 1s.939ms)
 

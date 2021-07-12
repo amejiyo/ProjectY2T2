@@ -92,6 +92,7 @@ static uint8_t x = 0;
 static uint16_t ACK = 0;
 static uint16_t A = 0;
 static uint16_t B = 0;
+uint16_t store [20] = {0};
 
 typedef enum
 {
@@ -154,6 +155,7 @@ static DNMXPState State = S_idle;
 int32_t PWMOut = 5000;
 uint64_t _micros = 0;
 uint8_t cP = 0;
+int16_t a = 0;
 float EncoderVel = 0;
 float sumVel = 0;
 float calculatedVelocity = 0;
@@ -296,11 +298,12 @@ int main(void)
 
 		/* USER CODE BEGIN 3 */
 
-		//		int16_t inputChar = UARTReadChar(&UART2);
-		//		if (inputChar != -1)
-		//		{
-		//			DynamixelProtocal2(MainMemory, 1, inputChar, &UART2);
-		//		}
+		int16_t inputChar = UARTReadChar(&UART2);
+		a = inputChar;
+		if (inputChar != -1)
+		{
+			DynamixelProtocal2(MainMemory, 1, inputChar, &UART2);
+		}
 		findingPosition();
 		gotoSethome();
 		if (micros() - Timestamp >= dt){
@@ -718,13 +721,16 @@ uint32_t UARTGetRxHead(UARTStucrture *uart)
 int16_t UARTReadChar(UARTStucrture *uart)
 {
 	int16_t Result = -1; // -1 Mean no new data
-
+	static uint8_t order = 0;
 	//check Buffer Position
 	if (uart->RxTail != UARTGetRxHead(uart))
 	{
 		//get data from buffer
 		Result = uart->RxBuffer[uart->RxTail];
 		uart->RxTail = (uart->RxTail + 1) % uart->RxLen;
+		store[order] = Result;
+		order += 1;
+		order %= 20;
 
 	}
 	return Result;
@@ -1143,7 +1149,6 @@ void DynamixelProtocal2(uint8_t *Memory, uint8_t MotorID, int16_t dataIn,
 	}
 }
 
-}
 void I2Con(){
 	const uint8_t laserAddress = 0x23<<1;
 	static uint8_t pdataStart[1] = {0x45};
@@ -1155,7 +1160,7 @@ void I2CprepareRead(){
 	static uint8_t pdataStart[1] = {0x23};
 	static uint8_t status[1] = {0x00};
 	HAL_I2C_Master_Transmit_IT(&hi2c1, laserAddress, pdataStart, 1);
-	if(hi2c1.State == HAL_STATE_READY){
+	if(hi2c1.State == HAL_I2C_STATE_READY){
 		HAL_I2C_Master_Receive_IT(&hi2c1, laserAddress, status, 1);
 	}
 	return status;
@@ -1344,7 +1349,7 @@ void piVelocity(){
 	state[1] = state[0];
 }
 void gotoSethome(){
-	if(setHome == 1){
+	if(SetHome == 1){
 		if (currentPosition < 70){
 			velocity = -1.5;
 		}
@@ -1363,6 +1368,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin){
 		SetHome = 0;
 		HAL_NVIC_DisableIRQ(EXTI9_5_IRQn);
 	}
+}
 
 void kalman(){
 	static float omega = 0;
