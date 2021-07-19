@@ -1,0 +1,55 @@
+!SESSION 2021-07-19 11:21:04.937 -----------------------------------------------
+eclipse.buildId=Version 1.6.1
+java.version=11.0.9.1
+java.vendor=AdoptOpenJDK
+BootLoader constants: OS=macosx, ARCH=x86_64, WS=cocoa, NL=en_TH
+Framework arguments:  -keyring /Users/amejiyopakapak/.eclipse_keyring
+Command-line arguments:  -os macosx -ws cocoa -arch x86_64 -keyring /Users/amejiyopakapak/.eclipse_keyring
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2021-07-19 11:21:28.371
+!MESSAGE Log4j initialized with config file /Users/amejiyopakapak/Documents/GitHub/ProjectY2T2/week8/week8/week8/.metadata/.log4j.xml
+
+!ENTRY org.eclipse.core.net 1 0 2021-07-19 11:21:29.171
+!MESSAGE System property http.nonProxyHosts has been set to local|*.local|169.254/16|*.169.254/16 by an external source. This value will be overwritten using the values from the preferences
+!SESSION 2021-07-19 13:30:59.280 -----------------------------------------------
+eclipse.buildId=Version 1.6.1
+java.version=11.0.9.1
+java.vendor=AdoptOpenJDK
+BootLoader constants: OS=macosx, ARCH=x86_64, WS=cocoa, NL=en_TH
+Framework arguments:  -keyring /Users/amejiyopakapak/.eclipse_keyring
+Command-line arguments:  -os macosx -ws cocoa -arch x86_64 -keyring /Users/amejiyopakapak/.eclipse_keyring
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2021-07-19 13:31:11.234
+!MESSAGE Log4j initialized with config file /Users/amejiyopakapak/Documents/GitHub/ProjectY2T2/week8/week8/week8/.metadata/.log4j.xml
+
+!ENTRY org.eclipse.core.net 1 0 2021-07-19 13:31:11.734
+!MESSAGE System property http.nonProxyHosts has been set to local|*.local|169.254/16|*.169.254/16 by an external source. This value will be overwritten using the values from the preferences
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 4 0 2021-07-19 13:31:15.827
+!MESSAGE Illegal character in path at index 31: file:/Applications/STM32CubeIDE 2.app/Contents/Eclipse/configuration/com.st.stm32cube.ide.mcu.ide
+!STACK 0
+java.net.URISyntaxException: Illegal character in path at index 31: file:/Applications/STM32CubeIDE 2.app/Contents/Eclipse/configuration/com.st.stm32cube.ide.mcu.ide
+	at java.base/java.net.URI$Parser.fail(Unknown Source)
+	at java.base/java.net.URI$Parser.checkChars(Unknown Source)
+	at java.base/java.net.URI$Parser.parseHierarchical(Unknown Source)
+	at java.base/java.net.URI$Parser.parse(Unknown Source)
+	at java.base/java.net.URI.<init>(Unknown Source)
+	at java.base/java.net.URL.toURI(Unknown Source)
+	at com.st.stm32cube.ide.mcu.ide.ui.project.registry.internal.MCUMacRegistry.installRegistryImpl(MCUMacRegistry.java:125)
+	at com.st.stm32cube.ide.mcu.ide.ui.project.registry.internal.MCUMacRegistry.installDotCProjetRegistry(MCUMacRegistry.java:53)
+	at com.st.stm32cube.ide.mcu.ide.ui.project.registry.internal.MCURegistry.installRegistry(MCURegistry.java:59)
+	at com.st.stm32cube.ide.mcu.ide.ui.project.internal.MCUProjectImporterStartup.earlyStartup(MCUProjectImporterStartup.java:53)
+	at org.eclipse.ui.internal.EarlyStartupRunnable.runEarlyStartup(EarlyStartupRunnable.java:79)
+	at org.eclipse.ui.internal.EarlyStartupRunnable.run(EarlyStartupRunnable.java:55)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:45)
+	at org.eclipse.ui.internal.Workbench$40.run(Workbench.java:2701)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 4 4 2021-07-19 13:31:16.335
+!MESSAGE com.st.stm32cube.ide.mcu.ide/META-INF/version/build_ref file not found, build reference will not be reported into properties
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2021-07-19 13:31:16.855
+!MESSAGE Started RMI Server, listening on port 41337
+
+!ENTRY org.eclipse.cdt.core 1 0 2021-07-19 13:33:37.569
+!MESSAGE Indexed 'week8' (24 sources, 86 headers) in 6.98 sec: 6,756 declarations; 50,102 references; 0 unresolved inclusions; 1 syntax errors; 2 unresolved names (0.0035%)
