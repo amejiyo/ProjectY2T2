@@ -5,7 +5,7 @@ from PyQt5.QtCore import QTimer
 import random
 
 
-ser = serial.Serial('/dev/cu.usbmodem141103',512000,parity='E',stopbits=1,timeout=3) #when using serial only
+ser = serial.Serial('/dev/cu.usbmodem142203',512000,parity='E',stopbits=1,timeout=3) #when using serial only
 # ser=serial.Serial() #when not using serial. Switch to the mode above when using serial
 
 TenStations=[1,5,18,25,36,50,54,60,62,70] #config the stations 
