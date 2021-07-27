@@ -92,6 +92,11 @@ static uint8_t x = 0;
 static uint16_t ACK = 0;
 static uint16_t A = 0;
 static uint16_t B = 0;
+static float Vel_Data = 0; //--------------> Velocity from UI
+static uint16_t Pos_Data = 0; //--------------> Position from UI
+static uint16_t C_Station = 0; //--------------> Current Station from UI
+static uint16_t Gripper = 0; //--------------> Gripper on/off , 1/0
+static uint16_t Connect = 0; //--------------> Connect / Disconnect , 1/0
 uint16_t store [20] = {0};
 
 typedef enum
@@ -881,6 +886,7 @@ void DynamixelProtocal2(uint8_t *Memory, uint8_t MotorID, int16_t dataIn,
 
 	case S_Frame2_DataFrame_2:
 		DATAFRAME[CollectedData] = dataIn &0xff;
+		Vel_Data = DATAFRAME[CollectedData];
 		CollectedData++;
 		State = S_Checksum2 ;
 		break;
@@ -899,18 +905,21 @@ void DynamixelProtocal2(uint8_t *Memory, uint8_t MotorID, int16_t dataIn,
 
 	case S_Frame2_DataFrame_Mode5_1 :
 		DATAFRAME_5[CollectedData] = dataIn &0xff;
+		Pos_Data = DATAFRAME[CollectedData];
 		CollectedData++;
 		State = S_Frame2_DataFrame_Mode5_2;
 		break;
 
 	case S_Frame2_DataFrame_Mode5_2:
 		DATAFRAME_5[CollectedData] = dataIn &0xff;
+		Pos_Data = (Pos_Data << 8) | DATAFRAME[CollectedData];
 		CollectedData++;
 		State = S_Checksum2_5 ;
 		break;
 
 	case S_Frame3_Station:
 		STATION = dataIn &0xff;
+		C_Station = STATION;
 		DATA = (STATION) &0xff;
 		if(DATA % 2 == 0) 				//EVEN
 		{
@@ -1020,6 +1029,7 @@ void DynamixelProtocal2(uint8_t *Memory, uint8_t MotorID, int16_t dataIn,
 			{
 				uint8_t temp[] = {0x58,0x75};
 				UARTTxWrite(uart, temp, 2);
+				Connect = 1;
 				State = S_idle ;
 				break;
 			}
@@ -1027,6 +1037,7 @@ void DynamixelProtocal2(uint8_t *Memory, uint8_t MotorID, int16_t dataIn,
 			{
 				uint8_t temp[] = {0x58,0x75};
 				UARTTxWrite(uart, temp, 2);
+				Connect = 0;
 				State = S_idle ;
 				break;
 			}
@@ -1044,6 +1055,7 @@ void DynamixelProtocal2(uint8_t *Memory, uint8_t MotorID, int16_t dataIn,
 			{
 				uint8_t temp[] = {0x58,0x75};
 				UARTTxWrite(uart, temp, 2);
+				Gripper = 1;
 				State = S_idle ;
 				break;
 			}
@@ -1051,6 +1063,7 @@ void DynamixelProtocal2(uint8_t *Memory, uint8_t MotorID, int16_t dataIn,
 			{
 				uint8_t temp[] = {0x58,0x75};
 				UARTTxWrite(uart, temp, 2);
+				Gripper = 0;
 				State = S_idle ;
 				break;
 			}
