@@ -92,6 +92,7 @@ static uint8_t x = 0;
 static uint16_t ACK = 0;
 static uint16_t A = 0;
 static uint16_t B = 0;
+uint16_t XX = 0;
 static float Vel_Data = 0; //--------------> Velocity from UI
 static uint16_t Pos_Data = 0; //--------------> Position from UI
 static uint16_t C_Station = 0; //--------------> Current Station from UI
@@ -170,21 +171,21 @@ float alpha = 0;
 float stopError = 0.1;
 float tim = 0;
 uint8_t check = 0;
-_Bool SetHome = 0;
+_Bool SetHome = 0; //--------------------->> sethome
 uint64_t setTime = 0;
 float startAngle = 0;
 float stopTime = 0;
 uint8_t storeAngle = 0;
-float finalAngle = 30;
+float finalAngle = 30; //----------------->> Pos_Data
 float currentPosition = 0;
 float rawPosition[2] = {0};
 float accerelation = 0;
 uint8_t state[2] = {0};
-_Bool start = 0;
+_Bool start = 0; //---------------------->> go
 uint16_t dt = 2000;
 uint64_t TimeOutputLoop = 0;
 uint64_t Timestamp = 0;
-float vMax = 8;
+float vMax = 8; //--------------------->> Vel_Data
 float Kp = 200;
 float Ki = 0.1;
 float Kd = 0;
@@ -811,354 +812,363 @@ void DynamixelProtocal2(uint8_t *Memory, uint8_t MotorID, int16_t dataIn,
 
 
 	//	Pj.State Machine
-	switch (State)
+	if(dataIn == 999)
 	{
-	case CheckACK1:
-		if ((dataIn &0xFF) == 0x58)
-			State = CheckACK2 ;
-	case CheckACK2:
-		if ((dataIn &0xFF) == 0x75)
-			ACK = 0;
-		State = S_idle ;
-
-	case S_idle:
-		if (ACK == 1)
+		B = 25;
+		uint8_t temp[] = {0x46,0x6E};
+		UARTTxWrite(uart, temp,2);
+	}
+	else
+	{
+		switch (State)
 		{
-			State = CheckACK1;
+		case CheckACK1:
+			if ((dataIn &0xFF) == 0x58)
+				State = CheckACK2 ;
+		case CheckACK2:
+			if ((dataIn &0xFF) == 0x75)
+				ACK = 0;
+			State = S_idle ;
 
-		}
-		else
-		{
-			if (((dataIn >> 4) & 0xff) == 0x09)
+		case S_idle:
+			if (ACK == 1)
 			{
-				START = dataIn;
-				if ((dataIn &0x0F) == 0x02 || (dataIn &0x0F) == 0x03 || (dataIn &0x0F) >= 0x08) //case 2,3,8-14 Frame#1
+				State = CheckACK1;
+
+			}
+			else
+			{
+				if (((dataIn >> 4) & 0xff) == 0x09)
 				{
-					if((dataIn &0x0F) == 0x09 ||(dataIn &0x0F) == 0x0A || (dataIn &0x0F) == 0x0B)
+					START = dataIn;
+					if ((dataIn &0x0F) == 0x02 || (dataIn &0x0F) == 0x03 || (dataIn &0x0F) >= 0x08) //case 2,3,8-14 Frame#1
+					{
+						if((dataIn &0x0F) == 0x09 ||(dataIn &0x0F) == 0x0A || (dataIn &0x0F) == 0x0B)
+						{
+							MODE = dataIn &0x0F ;
+							State = S_Checksum1_2;
+						}
+						else
+						{
+							MODE = dataIn &0x0F ;
+							State = S_Checksum1;
+						}
+
+					}
+					else if ((dataIn &0x0F) == 0x01 || ((dataIn &0x0F) == 0x06)) //case 1,6 Frame#2
 					{
 						MODE = dataIn &0x0F ;
-						State = S_Checksum1_2;
+						State = S_Frame2_DataFrame_1;
+					}
+					else if ((dataIn &0x0F) == 0x04) //case 4 Frame#2
+					{
+						MODE = dataIn &0x0F ;
+						State = S_Frame2_DataFrame_1;
+					}
+					else if ((dataIn &0x0F) == 0x05) //case 5 Frame#2
+					{
+						MODE = dataIn &0x0F ;
+						State = S_Frame2_DataFrame_Mode5_1;
+					}
+					else if ((dataIn &0x0F) == 0x07) //case 7 Frame#3
+					{
+						MODE = dataIn &0x0F ;
+						State = S_Frame3_Station;
 					}
 					else
 					{
-						MODE = dataIn &0x0F ;
-						State = S_Checksum1;
+						State = S_idle ;
 					}
-
-				}
-				else if ((dataIn &0x0F) == 0x01 || ((dataIn &0x0F) <= 0x06)) //case 1,6 Frame#2
-				{
-					MODE = dataIn &0x0F ;
-					State = S_Frame2_DataFrame_1;
-				}
-				else if ((dataIn &0x0F) == 0x04) //case 4 Frame#2
-				{
-					MODE = dataIn &0x0F ;
-					State = S_Frame2_DataFrame_1;
-				}
-				else if ((dataIn &0x0F) == 0x05) //case 5 Frame#2
-				{
-					MODE = dataIn &0x0F ;
-					State = S_Frame2_DataFrame_Mode5_1;
-				}
-				else if ((dataIn &0x0F) == 0x07) //case 7 Frame#3
-				{
-					MODE = dataIn &0x0F ;
-					State = S_Frame3_Station;
 				}
 				else
 				{
 					State = S_idle ;
 				}
 			}
+			break;
+
+		case S_Frame2_DataFrame_1 :
+			DATAFRAME[CollectedData] = dataIn &0xff;
+			CollectedData++;
+			State = S_Frame2_DataFrame_2;
+			break;
+
+		case S_Frame2_DataFrame_2:
+			DATAFRAME[CollectedData] = dataIn &0xff;
+			vMax = DATAFRAME[CollectedData];
+			CollectedData++;
+			State = S_Checksum2 ;
+			break;
+
+			//	case S_Frame2_DataFrame_Mode4_1 :
+			//		DATAFRAME[CollectedData] = dataIn &0xff;
+			//		CollectedData++;
+			//		State = S_Frame2_DataFrame_Mode4_2;
+			//		break;
+			//
+			//	case S_Frame2_DataFrame_Mode4_2:
+			//		DATAFRAME[CollectedData] = dataIn &0xff;
+			//		CollectedData++;
+			//		State = S_Checksum2_4 ;
+			//		break;
+
+		case S_Frame2_DataFrame_Mode5_1 :
+			DATAFRAME[CollectedData] = dataIn &0xff;
+			finalAngle = DATAFRAME[CollectedData];
+			CollectedData++;
+			State = S_Frame2_DataFrame_Mode5_2;
+			break;
+
+		case S_Frame2_DataFrame_Mode5_2:
+			DATAFRAME[CollectedData] = dataIn &0xff;
+			finalAngle = (Pos_Data << 8) | DATAFRAME[CollectedData];
+			CollectedData++;
+			State = S_Checksum2 ;
+			break;
+
+		case S_Frame3_Station:
+			STATION = dataIn &0xff;
+			C_Station = STATION;
+			DATA = (STATION) &0xff;
+			if(DATA % 2 == 0) 				//EVEN
+					{
+				DATA_Byte = (DATA/2);
+					}
+			else							//odd
+			{
+				DATA_Byte = (DATA+1)/2;
+			}
+			State = S_Frame3_DataFrame_2;
+			break;
+
+
+		case S500 :
+			DATAFRAME[CollectedData] = dataIn &0xff;
+			CollectedData++;
+			State = S600;
+			break;
+		case S600 :
+			DATAFRAME[CollectedData] = dataIn &0xff;
+			CollectedData++;
+			State = S700;
+			break;
+		case S700 :
+			DATAFRAME[CollectedData] = dataIn &0xff;
+			CollectedData++;
+			State = S_Checksum3;
+			break;
+
+		case S_Jump :
+			State = S_Checksum3;
+			break;
+
+		case  S_Frame3_DataFrame_2:
+		{
+			if (x < DATA_Byte)
+			{
+				x++;
+				S = dataIn &0xff;
+				DATA_N_SUM += S;
+				DATAFRAME[CollectedData] = S;
+				CollectedData++;
+
+			}
 			else
 			{
-				State = S_idle ;
+				B+=1;
 			}
+			State = S_Checksum3;
+			break;
 		}
-		break;
 
-	case S_Frame2_DataFrame_1 :
-		DATAFRAME[CollectedData] = dataIn &0xff;
-		CollectedData++;
-		State = S_Frame2_DataFrame_2;
-		break;
-
-	case S_Frame2_DataFrame_2:
-		DATAFRAME[CollectedData] = dataIn &0xff;
-		Vel_Data = DATAFRAME[CollectedData];
-		CollectedData++;
-		State = S_Checksum2 ;
-		break;
-
-	case S_Frame2_DataFrame_Mode4_1 :
-		DATAFRAME[CollectedData] = dataIn &0xff;
-		CollectedData++;
-		State = S_Frame2_DataFrame_Mode4_2;
-		break;
-
-	case S_Frame2_DataFrame_Mode4_2:
-		DATAFRAME[CollectedData] = dataIn &0xff;
-		CollectedData++;
-		State = S_Checksum2_4 ;
-		break;
-
-	case S_Frame2_DataFrame_Mode5_1 :
-		DATAFRAME_5[CollectedData] = dataIn &0xff;
-		Pos_Data = DATAFRAME[CollectedData];
-		CollectedData++;
-		State = S_Frame2_DataFrame_Mode5_2;
-		break;
-
-	case S_Frame2_DataFrame_Mode5_2:
-		DATAFRAME_5[CollectedData] = dataIn &0xff;
-		Pos_Data = (Pos_Data << 8) | DATAFRAME[CollectedData];
-		CollectedData++;
-		State = S_Checksum2_5 ;
-		break;
-
-	case S_Frame3_Station:
-		STATION = dataIn &0xff;
-		C_Station = STATION;
-		DATA = (STATION) &0xff;
-		if(DATA % 2 == 0) 				//EVEN
-		{
-			DATA_Byte = (DATA/2);
-		}
-		else							//odd
-		{
-			DATA_Byte = (DATA+1)/2;
-		}
-		State = S_Frame3_DataFrame_2;
-		break;
-
-
-	case S500 :
-		DATAFRAME[CollectedData] = dataIn &0xff;
-		CollectedData++;
-		State = S600;
-		break;
-	case S600 :
-		DATAFRAME[CollectedData] = dataIn &0xff;
-		CollectedData++;
-		State = S700;
-		break;
-	case S700 :
-		DATAFRAME[CollectedData] = dataIn &0xff;
-		CollectedData++;
-		State = S_Checksum3;
-		break;
-
-	case S_Jump :
-		State = S_Checksum3;
-		break;
-
-	case  S_Frame3_DataFrame_2:
-	{
-		if (x < DATA_Byte)
-		{
-			x++;
-			S = dataIn &0xff;
-			DATA_N_SUM += S;
-			DATAFRAME[CollectedData] = S;
-			CollectedData++;
-
-		}
-		else
-		{
-			B+=1;
-		}
-		State = S_Checksum3;
-		break;
-	}
-
-	case S_Checksum1_2:
-		CHECKSUM = dataIn & 0xff ;
-		CHECK_SUM1 = ~((0x9 << 4) | MODE );
-		if (CHECK_SUM1 == CHECKSUM)
-		{
-			switch (MODE)
+		case S_Checksum1_2:
+			CHECKSUM = dataIn & 0xff ;
+			CHECK_SUM1 = ~((0x9 << 4) | MODE );
+			if (CHECK_SUM1 == CHECKSUM)
 			{
-			case 0b1001: //9
-			{
-				uint8_t temp[] = {0x58,0x75};
-				UARTTxWrite(uart, temp, 2);
-				CHECK_SEND = ~ (0x99 + (DATAFRAME[CollectedData-2]) + (DATAFRAME[CollectedData-1]));
-				uint8_t FRAME2[] = {0x99,(DATAFRAME[CollectedData-2]),(DATAFRAME[CollectedData-1]),CHECK_SEND};
-				UARTTxWrite(uart, FRAME2, 4);
-				break;
-			}
-			case 0b1010: //10
-			{
-				uint8_t temp[] = {0x58,0x75};
-				UARTTxWrite(uart, temp, 2);
-				CHECK_SEND = ~(0x9A + (DATAFRAME[CollectedData-2]) + (DATAFRAME[CollectedData-1]));
-				uint8_t FRAME2[] = {0x9A,(DATAFRAME[CollectedData-2]),(DATAFRAME[CollectedData-1]),CHECK_SEND};
-				UARTTxWrite(uart, FRAME2, 4);
-				break;
-			}
-			case 0b1011: //11
-			{
-				uint8_t temp[] = {0x58,0x75};
-				UARTTxWrite(uart, temp, 2);
-				CHECK_SEND = ~(0x9B + (DATAFRAME[CollectedData-2]) + (DATAFRAME[CollectedData-1]));
-				uint8_t FRAME2[] = {0x9B,(DATAFRAME[CollectedData-2]),(DATAFRAME[CollectedData-1]),CHECK_SEND};
-				UARTTxWrite(uart, FRAME2, 4);
-				break;
-			}
-			}
+				switch (MODE)
+				{
+				case 0b1001: //9
+				{
+					uint8_t temp[] = {0x58,0x75};
+					UARTTxWrite(uart, temp, 2);
+					CHECK_SEND = ~ (0x99 + (DATAFRAME[CollectedData-2]) + (DATAFRAME[CollectedData-1]));
+					uint8_t FRAME2[] = {0x99,(DATAFRAME[CollectedData-2]),(DATAFRAME[CollectedData-1]),CHECK_SEND};
+					UARTTxWrite(uart, FRAME2, 4);
+					break;
+				}
+				case 0b1010: //10
+				{
+					uint8_t temp[] = {0x58,0x75};
+					UARTTxWrite(uart, temp, 2);
+					CHECK_SEND = ~(0x9A + (DATAFRAME[CollectedData-2]) + (DATAFRAME[CollectedData-1]));
+					uint8_t FRAME2[] = {0x9A,(DATAFRAME[CollectedData-2]),(DATAFRAME[CollectedData-1]),CHECK_SEND};
+					UARTTxWrite(uart, FRAME2, 4);
+					break;
+				}
+				case 0b1011: //11
+				{
+					uint8_t temp[] = {0x58,0x75};
+					UARTTxWrite(uart, temp, 2);
+					CHECK_SEND = ~(0x9B + (DATAFRAME[CollectedData-2]) + (DATAFRAME[CollectedData-1]));
+					uint8_t FRAME2[] = {0x9B,(DATAFRAME[CollectedData-2]),(DATAFRAME[CollectedData-1]),CHECK_SEND};
+					UARTTxWrite(uart, FRAME2, 4);
+					break;
+				}
+				}
 
-		}
-		else
-		{
-			uint8_t temp[] = {START,0x75,CHECKSUM};
-			UARTTxWrite(uart, temp, 3);
-		}
-		ACK = 1;
-		State = S_idle ;
-		break;
-
-	case S_Checksum1:
-		CHECKSUM = dataIn & 0xff ;
-		CHECK_SUM1 = ~((0x9 << 4) | MODE );
-		if (CHECK_SUM1 == CHECKSUM)
-		{
-			switch (MODE)
-			{
-			case 0b0010: //2
-			{
-				uint8_t temp[] = {0x58,0x75};
-				UARTTxWrite(uart, temp, 2);
-				Connect = 1;
-				State = S_idle ;
-				break;
 			}
-			case 0b0011: //3
+			else
 			{
-				uint8_t temp[] = {0x58,0x75};
-				UARTTxWrite(uart, temp, 2);
-				Connect = 0;
-				State = S_idle ;
-				break;
+				uint8_t temp[] = {START,0x75,CHECKSUM};
+				UARTTxWrite(uart, temp, 3);
 			}
-			case 0b1000: //8
-			{
-				uint8_t temp[] = {0x58,0x75};
-				//				uint8_t count = 0;                 				//Endeffecter (on / off) : 1
-				UARTTxWrite(uart, temp,2);
-				HAL_Delay(5000);
-				start = 1;
-				State = S_idle;
-				break;
-			}
-			case 0b1100: //12
-			{
-				uint8_t temp[] = {0x58,0x75};
-				UARTTxWrite(uart, temp, 2);
-				Gripper = 1;
-				State = S_idle ;
-				break;
-			}
-			case 0b1101: //13
-			{
-				uint8_t temp[] = {0x58,0x75};
-				UARTTxWrite(uart, temp, 2);
-				Gripper = 0;
-				State = S_idle ;
-				break;
-			}
-			case 0b1110: //14
-			{
-				uint8_t temp[] = {0x58,0x75};
-				UARTTxWrite(uart, temp, 2);
-				State = S_idle ;
-				break;
-			}
-			}
-
-		}
-		else
-		{
-			uint8_t temp[] = {START,0x75,CHECKSUM};
-			UARTTxWrite(uart, temp, 3);
+			ACK = 1;
 			State = S_idle ;
-		}
-		break;
+			break;
 
-	case S_Checksum2:
-		CHECKSUM = dataIn & 0xff ;
-		CHECK_SUM3 = ~( ((0x9 << 4) | MODE) + STATION + DATA_N_SUM);
-		CHECK_SUM1 = ~( ((0x9 << 4) | MODE) + ((DATAFRAME[CollectedData-1]) + (DATAFRAME[CollectedData-2])) );
-		if (CHECK_SUM1 == CHECKSUM)
-		{
-			switch (MODE)
+		case S_Checksum1:
+			CHECKSUM = dataIn & 0xff ;
+			CHECK_SUM1 = ~((0x9 << 4) | MODE );
+			if (CHECK_SUM1 == CHECKSUM)
 			{
-			case 0b0001: //1
+				switch (MODE)
+				{
+				case 0b0010: //2
+				{
+					uint8_t temp[] = {0x58,0x75};
+					UARTTxWrite(uart, temp, 2);
+					Connect = 1;
+					State = S_idle ;
+					break;
+				}
+				case 0b0011: //3
+				{
+					uint8_t temp[] = {0x58,0x75};
+					UARTTxWrite(uart, temp, 2);
+					Connect = 0;
+					State = S_idle ;
+					break;
+				}
+				case 0b1000: //8
+				{
+					uint8_t temp[] = {0x58,0x75};
+					UARTTxWrite(uart, temp,2);
+					HAL_Delay(5000);
+					start = 1;
+					State = S_idle;
+					break;
+				}
+				case 0b1100: //12
+				{
+					uint8_t temp[] = {0x58,0x75};
+					UARTTxWrite(uart, temp, 2);
+					Gripper = 1;
+					State = S_idle ;
+					break;
+				}
+				case 0b1101: //13
+				{
+					uint8_t temp[] = {0x58,0x75};
+					UARTTxWrite(uart, temp, 2);
+					Gripper = 0;
+					State = S_idle ;
+					break;
+				}
+				case 0b1110: //14
+				{
+					uint8_t temp[] = {0x58,0x75};
+					UARTTxWrite(uart, temp, 2);
+					State = S_idle ;
+					break;
+				}
+				}
+
+			}
+			else
 			{
-				uint8_t temp[] = {0x58,0x75};
-				UARTTxWrite(uart, temp, 2);
-				break;
+				uint8_t temp[] = {START,0x75,CHECKSUM};
+				UARTTxWrite(uart, temp, 3);
+				State = S_idle ;
 			}
-			case 0b0100: //4
+			break;
+
+		case S_Checksum2:
+			CHECKSUM = dataIn & 0xff ;
+			CHECK_SUM3 = ~( ((0x9 << 4) | MODE) + STATION + DATA_N_SUM);
+			CHECK_SUM1 = ~( ((0x9 << 4) | MODE) + ((DATAFRAME[CollectedData-1]) + (DATAFRAME[CollectedData-2])) );
+			if (CHECK_SUM1 == CHECKSUM)
 			{
-				uint8_t temp[] = {0x58,0x75};
-				UARTTxWrite(uart, temp, 2);
-				break;
+				switch (MODE)
+				{
+				case 0b0001: //1
+				{
+					uint8_t temp[] = {0x58,0x75};
+					UARTTxWrite(uart, temp, 2);
+					break;
+				}
+				case 0b0100: //4
+				{
+					uint8_t temp[] = {0x58,0x75};
+					UARTTxWrite(uart, temp, 2);
+					break;
+				}
+				case 0b0101: //5
+				{
+					uint8_t temp[] = {0x58,0x75};
+					UARTTxWrite(uart, temp, 2);
+					break;
+				}
+				case 0b0110: //6
+				{
+					uint8_t temp[] = {0x58,0x75};
+					UARTTxWrite(uart, temp, 2);
+					break;
+				}
+				case 0b0111: //7
+				{
+					uint8_t temp[] = {0x58,0x75};
+					UARTTxWrite(uart, temp, 2);
+					break;
+				}
+				}
 			}
-			case 0b0101: //5
+			else
 			{
-				uint8_t temp[] = {0x58,0x75};
-				UARTTxWrite(uart, temp, 2);
-				break;
+				uint8_t temp[] = {START,0x75,CHECKSUM};
+				UARTTxWrite(uart, temp, 3);
 			}
-			case 0b0110: //6
+
+			DATA_N_SUM = 0;
+			x=0;
+			State = S_idle;
+			break;
+
+		case S_Checksum3:
+			x = 0;
+			CHECK_SUM1 = ~( ((0x9 << 4) | MODE) + STATION + DATA_N_SUM);
+			CHECKSUM = dataIn & 0xff ;
+			if (CHECK_SUM1 == CHECKSUM)
 			{
-				uint8_t temp[] = {0x58,0x75};
-				UARTTxWrite(uart, temp, 2);
-				break;
+				switch (MODE)
+				{
+				case 0b0111: //7
+				{
+					uint8_t temp[] = {0x75};
+					UARTTxWrite(uart, temp, 1);
+					break;
+				}
+				}
 			}
-			case 0b0111: //7
+			else
 			{
-				uint8_t temp[] = {0x58,0x75};
-				UARTTxWrite(uart, temp, 2);
-				break;
+				uint8_t temp[] = {START,0x75,CHECKSUM};
+				UARTTxWrite(uart, temp, 3);
 			}
-			}
-		}
-		else
-		{
-			uint8_t temp[] = {START,0x75,CHECKSUM};
-			UARTTxWrite(uart, temp, 3);
+			State = S_idle;
+			break;
 		}
 
-		DATA_N_SUM = 0;
-		x=0;
-		State = S_idle;
-		break;
-
-	case S_Checksum3:
-		x = 0;
-		CHECK_SUM1 = ~( ((0x9 << 4) | MODE) + STATION + DATA_N_SUM);
-		CHECKSUM = dataIn & 0xff ;
-		if (CHECK_SUM1 == CHECKSUM)
-		{
-			switch (MODE)
-			{
-			case 0b0111: //7
-			{
-				uint8_t temp[] = {0x75};
-				UARTTxWrite(uart, temp, 1);
-				break;
-			}
-			}
-		}
-		else
-		{
-			uint8_t temp[] = {START,0x75,CHECKSUM};
-			UARTTxWrite(uart, temp, 3);
-		}
-		State = S_idle;
-		break;
 	}
 }
 
@@ -1238,73 +1248,44 @@ void trajectory(uint64_t Timestamp){
 	static float a1 = 0;
 	static float a2 = 0;
 	static float a3 = 0;
-	static float a4 = 0;
-	static float a5 = 0;
 	static uint64_t setTime = 0;
 	state[0] = start;
-	if (abs(finalAngle - startAngle) > 50){
-		Kp = 150;
+	rawPosition[0] = HTIM_ENCODER.Instance->CNT*90/2048;
+	if((rawPosition[0] < 10 )&& (rawPosition[1] > 87)){
+		cP += 1;
 	}
+	else if ((rawPosition[0] >87 )&& (rawPosition[1] < 10)){
+		cP -= 1;
+	}
+	if (cP > 3){
+		cP = 0;
+	}
+	else if (cP < 0){
+		cP = 0;
+	}
+	currentPosition = rawPosition[0] + cP*90;
 	if(state[0] == 1){
 		if(state[0] != state[1]){
 			setTime = Timestamp;
 			startAngle = currentPosition;
 		}
-		if(abs(finalAngle - startAngle) > 80){
-			stopError = 5;
-		}
-		else{
-			stopError = 0;
-		}
 		tim = (float) (Timestamp-setTime)/1000000;
-		tF = (float) (250*abs(finalAngle-startAngle)/(355*vMax));
-		if ((tim <= tF)){
-			//cubic trajectory
-			a0 = startAngle;
-			a1 = 0;
-			a2 = (float) (3/pow(tF,2))*(finalAngle-startAngle);
-			a3 = (float) -(2/pow(tF,3))*(finalAngle-startAngle);
-			position = (float) a0+ (a1*tim) +(a2*pow(tim,2)) +(a3*pow(tim,3));
-			calculatedVelocity = (float) (a1 +(2*a2*tim) +(3*a3*pow(tim,2)))/6;
-			alpha = (float) ((2*a2) +(6*a3*tim))*2*3.14/360;
-
-			//		//quintic trajectory
-			//		a0 = startAngle;
-			//		a1 = 0;
-			//		a2 = 0;
-			//		a3 = (float) 10*(finalAngle - startAngle)/pow(tF,3);
-			//		a4 = (float) -15*(finalAngle-startAngle)/pow(tF,4);
-			//		a5 = (float) 6*(finalAngle-startAngle)/pow(tF,4);
-			//		position = (float) a0 + a1*tim + a2*pow(tim,2) + a3*pow(tim,3) + a4*pow(tim,4) + a5*pow(tim,5);
-			//		calculatedVelocity = (float) a1+ 2*a2*tim + 3*a3*pow(tim,2) + 4*a4*pow(tim,3) + 5*a5*pow(tim,4);
-			//		alpha = (float) a2 + 6*a3*tim + 12*a4*pow(tim,2) + 20*a5*pow(tim,3);
+		tF = (float) (250*abs(finalAngle-startAngle-storeAngle)/(355*vMax));
+		a0 = startAngle;
+		a1 = 0;
+		a2 = (float) (3/pow(tF,2))*(finalAngle-startAngle);
+		a3 = (float) -(2/pow(tF,3))*(finalAngle-startAngle);
+		position = (float) a0+ (a1*tim) +(a2*pow(tim,2)) +(a3*pow(tim,3));
+		velocity = (float) (a1 +(2*a2*tim) +(3*a3*pow(tim,2)))/6;
+		alpha = (float) ((2*a2) +(6*a3*tim))*2*3.14/360;
+		if ((abs(currentPosition - finalAngle) < 2)||(tim >= tF)){
+			start = 0;
+			velocity = 0;
+			stopTime = Timestamp;
+			DynamixelProtocal2(MainMemory, 1,999, &UART2);
 		}
-		if(abs(currentPosition - finalAngle) < 8){
-			K = 1500;
-			if(velocity < 0){
-				velocity = -1;
-			}
-			else{
-				velocity = 1;
-			}
-			if (abs(currentPosition - finalAngle) == 0){
-				start = 0;
-				//				uint8_t temp2[] = {0x46,0x6E};
-				//				UARTTxWrite(&UART2, temp2, 2);
-				velocity = 0;
-				stopTime = Timestamp;
-				I2Con();
-				state[1] = 0;
-				state[0] = 0;
-				pidPosition();
-			}
-		}
-		else{
-			K = 1000;
-			pidPosition();
-		}
-		piVelocity();
 	}
+	rawPosition[1] = rawPosition[0];
 }
 
 void pidPosition(){
