@@ -2415,3 +2415,97 @@ java.io.FileNotFoundException: /Users/amejiyopakapak/Documents/GitHub/ProjectY2T
 	at org.eclipse.debug.internal.ui.DebugUIPlugin.buildAndLaunch(DebugUIPlugin.java:1021)
 	at org.eclipse.debug.internal.ui.DebugUIPlugin$2.run(DebugUIPlugin.java:1224)
 	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SESSION 2021-08-02 08:26:00.620 -----------------------------------------------
+eclipse.buildId=Version 1.6.1
+java.version=11.0.9.1
+java.vendor=AdoptOpenJDK
+BootLoader constants: OS=macosx, ARCH=x86_64, WS=cocoa, NL=en_TH
+Framework arguments:  -keyring /Users/amejiyopakapak/.eclipse_keyring
+Command-line arguments:  -os macosx -ws cocoa -arch x86_64 -keyring /Users/amejiyopakapak/.eclipse_keyring
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2021-08-02 08:26:27.581
+!MESSAGE Log4j initialized with config file /Users/amejiyopakapak/Documents/GitHub/ProjectY2T2/week8/week8/.metadata/.log4j.xml
+
+!ENTRY org.eclipse.core.net 1 0 2021-08-02 08:26:33.776
+!MESSAGE System property http.nonProxyHosts has been set to local|*.local|169.254/16|*.169.254/16 by an external source. This value will be overwritten using the values from the preferences
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 4 0 2021-08-02 08:26:38.957
+!MESSAGE Illegal character in path at index 31: file:/Applications/STM32CubeIDE 2.app/Contents/Eclipse/configuration/com.st.stm32cube.ide.mcu.ide
+!STACK 0
+java.net.URISyntaxException: Illegal character in path at index 31: file:/Applications/STM32CubeIDE 2.app/Contents/Eclipse/configuration/com.st.stm32cube.ide.mcu.ide
+	at java.base/java.net.URI$Parser.fail(Unknown Source)
+	at java.base/java.net.URI$Parser.checkChars(Unknown Source)
+	at java.base/java.net.URI$Parser.parseHierarchical(Unknown Source)
+	at java.base/java.net.URI$Parser.parse(Unknown Source)
+	at java.base/java.net.URI.<init>(Unknown Source)
+	at java.base/java.net.URL.toURI(Unknown Source)
+	at com.st.stm32cube.ide.mcu.ide.ui.project.registry.internal.MCUMacRegistry.installRegistryImpl(MCUMacRegistry.java:125)
+	at com.st.stm32cube.ide.mcu.ide.ui.project.registry.internal.MCUMacRegistry.installDotCProjetRegistry(MCUMacRegistry.java:53)
+	at com.st.stm32cube.ide.mcu.ide.ui.project.registry.internal.MCURegistry.installRegistry(MCURegistry.java:59)
+	at com.st.stm32cube.ide.mcu.ide.ui.project.internal.MCUProjectImporterStartup.earlyStartup(MCUProjectImporterStartup.java:53)
+	at org.eclipse.ui.internal.EarlyStartupRunnable.runEarlyStartup(EarlyStartupRunnable.java:79)
+	at org.eclipse.ui.internal.EarlyStartupRunnable.run(EarlyStartupRunnable.java:55)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:45)
+	at org.eclipse.ui.internal.Workbench$40.run(Workbench.java:2701)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2021-08-02 08:26:39.087
+!MESSAGE Started RMI Server, listening on port 41337
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 4 4 2021-08-02 08:26:39.464
+!MESSAGE com.st.stm32cube.ide.mcu.ide/META-INF/version/build_ref file not found, build reference will not be reported into properties
+
+!ENTRY org.eclipse.cdt.dsf.gdb 4 5012 2021-08-02 09:29:02.491
+!MESSAGE Error in final launch sequence:
+
+Failed to execute MI command:
+load /Users/amejiyopakapak/Documents/GitHub/ProjectY2T2/week8/week8/week8/Debug/week8.elf 
+
+Error message from debugger back end:
+Error finishing flash operation
+!STACK 1
+org.eclipse.core.runtime.CoreException: Failed to execute MI command:
+load /Users/amejiyopakapak/Documents/GitHub/ProjectY2T2/week8/week8/week8/Debug/week8.elf 
+
+Error message from debugger back end:
+Error finishing flash operation
+	at org.eclipse.cdt.dsf.concurrent.Query.get(Query.java:112)
+	at org.eclipse.cdt.dsf.gdb.launching.GdbLaunchDelegate.launchDebugSession(GdbLaunchDelegate.java:242)
+	at org.eclipse.cdt.dsf.gdb.launching.GdbLaunchDelegate.launchDebugger(GdbLaunchDelegate.java:106)
+	at org.eclipse.cdt.dsf.gdb.launching.GdbLaunchDelegate.launch(GdbLaunchDelegate.java:94)
+	at com.st.stm32cube.ide.mcu.debug.launch.DSFDelegate.launch(DSFDelegate.java:307)
+	at org.eclipse.debug.internal.core.LaunchConfiguration.launch(LaunchConfiguration.java:807)
+	at org.eclipse.debug.internal.core.LaunchConfiguration.launch(LaunchConfiguration.java:718)
+	at org.eclipse.debug.internal.ui.DebugUIPlugin.buildAndLaunch(DebugUIPlugin.java:1021)
+	at org.eclipse.debug.internal.ui.DebugUIPlugin$2.run(DebugUIPlugin.java:1224)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+Contains: Failed to execute MI command:
+load /Users/amejiyopakapak/Documents/GitHub/ProjectY2T2/week8/week8/week8/Debug/week8.elf 
+
+Error message from debugger back end:
+Error finishing flash operation
+java.lang.Exception: Error finishing flash operation
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.processMIOutput(AbstractMIControl.java:993)
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.run(AbstractMIControl.java:822)
+!SUBENTRY 1 org.eclipse.cdt.dsf 4 10004 2021-08-02 09:29:02.493
+!MESSAGE Failed to execute MI command:
+load /Users/amejiyopakapak/Documents/GitHub/ProjectY2T2/week8/week8/week8/Debug/week8.elf 
+
+Error message from debugger back end:
+Error finishing flash operation
+!SUBENTRY 2 org.eclipse.cdt.dsf.gdb 4 10004 2021-08-02 09:29:02.493
+!MESSAGE Failed to execute MI command:
+load /Users/amejiyopakapak/Documents/GitHub/ProjectY2T2/week8/week8/week8/Debug/week8.elf 
+
+Error message from debugger back end:
+Error finishing flash operation
+!STACK 0
+java.lang.Exception: Error finishing flash operation
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.processMIOutput(AbstractMIControl.java:993)
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.run(AbstractMIControl.java:822)
+
+!ENTRY com.st.stm32cube.ide.mcu.debug 4 0 2021-08-02 09:29:03.287
+!MESSAGE Error - No active DSF-Session. tmpSessionId = 1 (contextManager row 121)
+
+!ENTRY com.st.stm32cube.ide.mcu.debug 4 0 2021-08-02 09:29:03.287
+!MESSAGE Existing sessions are:
