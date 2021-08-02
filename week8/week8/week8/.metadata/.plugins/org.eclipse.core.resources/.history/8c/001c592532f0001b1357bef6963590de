@@ -150,19 +150,20 @@ typedef enum
 static DNMXPState State = S_idle;
 
 ///////////////////////////////////////////////////////////////<--
-_Bool testCommand = 0; //for  mode 1
-_Bool connected = 0; //connect - disconnect (mode 2-3)
+_Bool testCommand = 0;
 int32_t PWMOut = 5000;
 uint64_t _micros = 0;
 uint8_t cP = 0;
-float EncoderVel = 0; //reading angular velocity for mode 10
+float outputVel = 0;
+float EncoderVel = 0;
+float sumVel = 0;
 float preVel = 0;
-float velocity = 0; //pid velocity
-float position = 0; //calculated position
-float alpha = 0; //angular acceleration
+float velocity = 0;
+float position = 0;
+float alpha = 0;
 float tim = 0;
 uint8_t check = 0;
-_Bool SetHome = 0; //enable set home mode
+_Bool SetHome = 0;
 uint64_t setTime = 0;
 float startAngle = 0;
 float stopTime = 0;
@@ -170,14 +171,13 @@ uint8_t storeAngle = 0;
 float finalAngle = 30;
 float currentPosition = 0;
 uint16_t rawPosition[2] = {0};
+float accerelation = 0;
 uint8_t state[2] = {0};
 _Bool start = 0;
 uint16_t dt = 10000;
 uint64_t TimeOutputLoop = 0;
 uint64_t Timestamp = 0;
-float vMax = 10; //maximum veloity
-
-//pid variable
+float vMax = 10;
 uint16_t Kp = 0;
 float Ki = 0;
 uint16_t Kd = 0;
@@ -185,8 +185,6 @@ uint16_t Kp_p = 0;
 float Ki_p = 0;
 uint16_t Kd_p = 0;
 uint16_t k = 0;
-
-//kalman filter variable
 float R = 0.2;
 float Gl = 10;
 static float tF = 0;
@@ -1033,7 +1031,6 @@ void DynamixelProtocal2(uint8_t *Memory, uint8_t MotorID, int16_t dataIn,
 			{
 			case 0b0010: //2
 			{
-				connected = 1;
 				uint8_t temp[] = {0x58,0x75};
 				UARTTxWrite(uart, temp, 2);
 				State = S_idle ;
@@ -1041,7 +1038,6 @@ void DynamixelProtocal2(uint8_t *Memory, uint8_t MotorID, int16_t dataIn,
 			}
 			case 0b0011: //3
 			{
-				connected = 0;
 				uint8_t temp[] = {0x58,0x75};
 				UARTTxWrite(uart, temp, 2);
 				State = S_idle ;
@@ -1050,8 +1046,7 @@ void DynamixelProtocal2(uint8_t *Memory, uint8_t MotorID, int16_t dataIn,
 			case 0b1000: //8
 			{
 				uint8_t temp[] = {0x58,0x75};
-				//				uint8_t count = 0;
-				//Endeffecter (on / off) : 1
+				//				uint8_t count = 0;                 				//Endeffecter (on / off) : 1
 				UARTTxWrite(uart, temp,2);
 				HAL_Delay(5000);
 				start = 1;
@@ -1100,7 +1095,7 @@ void DynamixelProtocal2(uint8_t *Memory, uint8_t MotorID, int16_t dataIn,
 			{
 			case 0b0001: //1
 			{
-				testCommand = ~testCommand;
+
 				uint8_t temp[] = {0x58,0x75};
 				UARTTxWrite(uart, temp, 2);
 				break;
@@ -1268,7 +1263,6 @@ void trajectory(uint64_t Timestamp){
 		cP = 0;
 	}
 	currentPosition = rawPosition[0] + cP*90;
-	preVel = EncoderVel;
 	if(state[0] == 1){
 		if(state[0] != state[1]){
 			setTime = Timestamp;
@@ -1377,7 +1371,6 @@ void kalman(){
 	P21predictPRE = (float) P21predict*(P22predict/(pow(R,2)+P22predict)-1);
 	P22predictPRE = (float) P22predict*(P22predict/(pow(R,2)+P22predict)-1);
 	omegaPredictPre = EncoderVel;
-	alpha = (EncoderVel - preVel)/delt;
 	if (velocity == 0){
 		P11predict = 0;
 		P12predict = 0;

@@ -159,10 +159,10 @@ float EncoderVel = 0; //reading angular velocity for mode 10
 float preVel = 0;
 float velocity = 0; //pid velocity
 float position = 0; //calculated position
-float alpha = 0; //angular acceleration
+float alpha = 0;
 float tim = 0;
 uint8_t check = 0;
-_Bool SetHome = 0; //enable set home mode
+_Bool SetHome = 0;
 uint64_t setTime = 0;
 float startAngle = 0;
 float stopTime = 0;
@@ -170,14 +170,13 @@ uint8_t storeAngle = 0;
 float finalAngle = 30;
 float currentPosition = 0;
 uint16_t rawPosition[2] = {0};
+float accerelation = 0;
 uint8_t state[2] = {0};
 _Bool start = 0;
 uint16_t dt = 10000;
 uint64_t TimeOutputLoop = 0;
 uint64_t Timestamp = 0;
-float vMax = 10; //maximum veloity
-
-//pid variable
+float vMax = 10;
 uint16_t Kp = 0;
 float Ki = 0;
 uint16_t Kd = 0;
@@ -185,8 +184,6 @@ uint16_t Kp_p = 0;
 float Ki_p = 0;
 uint16_t Kd_p = 0;
 uint16_t k = 0;
-
-//kalman filter variable
 float R = 0.2;
 float Gl = 10;
 static float tF = 0;
