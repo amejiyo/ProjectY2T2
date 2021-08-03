@@ -72,6 +72,7 @@ uint8_t MainMemory[255] =
 _Bool checkI2C = 0;
 static uint8_t CHECKSUM;
 static uint8_t CHECK_SUM1 = 0;
+static uint8_t CHECK_SUM2 = 0;
 static uint8_t CHECK_SUM3 = 0;
 static uint8_t CHECK_SEND = 0;
 static uint16_t START = 0;
@@ -924,7 +925,7 @@ void DynamixelProtocal2(uint8_t *Memory, uint8_t MotorID, int16_t dataIn,
 			finalAngle = (finalAngle << 8) | DATAFRAME[CollectedData];
 //			finalAngle = (Pos_Data << 8) | DATAFRAME[CollectedData];
 			CollectedData++;
-			State = S_Checksum2 ;
+			State = S_Checksum2_5 ;
 			break;
 
 		case S_Frame3_Station:
@@ -1094,8 +1095,35 @@ void DynamixelProtocal2(uint8_t *Memory, uint8_t MotorID, int16_t dataIn,
 			}
 			break;
 
+		case S_Checksum2_5:
+			CHECKSUM = dataIn & 0xff ;
+			CHECK_SUM2 = ~( ((0x9 << 4) | MODE) + 0x0 + finalAngle );
+			if (CHECK_SUM2 == CHECKSUM)
+			{
+				switch (MODE)
+				{
+				case 0b0101: //5
+				{
+					uint8_t temp[] = {0x58,0x75};
+					UARTTxWrite(uart, temp, 2);
+					break;
+				}
+				}
+			}
+			else
+			{
+				uint8_t temp[] = {START,0x75,CHECKSUM};
+				UARTTxWrite(uart, temp, 3);
+			}
+
+			DATA_N_SUM = 0;
+			x=0;
+			State = S_idle;
+			break;
+
 		case S_Checksum2:
 			CHECKSUM = dataIn & 0xff ;
+			CHECK_SUM2 = ~( ((0x9 << 4) | MODE) + 0x0 + finalAngle );
 			CHECK_SUM3 = ~( ((0x9 << 4) | MODE) + STATION + DATA_N_SUM);
 			CHECK_SUM1 = ~( ((0x9 << 4) | MODE) + ((DATAFRAME[CollectedData-1]) + (DATAFRAME[CollectedData-2])) );
 			if (CHECK_SUM1 == CHECKSUM)
