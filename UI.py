@@ -5,8 +5,8 @@ from PyQt5.QtCore import QTimer
 import random
 
 
-ser = serial.Serial('/dev/cu.usbmodem141203',512000,parity='E',stopbits=1,timeout=3) #when using serial only
-# ser=serial.Serial() #when not using serial. Switch to the mode above when using serial
+# ser = serial.Serial('/dev/cu.usbmodem141203',512000,parity='E',stopbits=1,timeout=3) #when using serial only
+ser=serial.Serial() #when not using serial. Switch to the mode above when using serial
 
 TenStations=[1,5,18,25,36,50,54,60,62,70] #config the stations 
 frame2station=0
@@ -382,8 +382,13 @@ class Ui_MainWindow(object):
         self.Accel.setText("Angular Position :" + str(ap))
         nocheck=[149,0,int(ap)]
         # print(apb[:1],apb[-1:])
-        ser.write([149,00,int(ap),self.checksum(nocheck)[0]])
-        # print([149,apb[:1],apb[-1:],self.checksum(nocheck)[0]])
+        highByte = 0
+        lowByte = int(ap)
+        if(lowByte > 255):
+            highByte = 1
+            lowByte = 300-256
+        # ser.write([149,highByte,lowByte,self.checksum(nocheck)[0]])
+        print([149,highByte,lowByte,self.checksum(nocheck)[0]])
         if (ser.readline()==b'\x58\x75'):
             print("Mode5 Done")
         else :
