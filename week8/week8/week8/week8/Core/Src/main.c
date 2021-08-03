@@ -176,7 +176,7 @@ uint64_t setTime = 0;
 float startAngle = 0;
 float stopTime = 0;
 uint8_t storeAngle = 0;
-float finalAngle = 30; //----------------->> Pos_Data
+uint16_t finalAngle = 30; //----------------->> Pos_Data
 float currentPosition = 0;
 float rawPosition[2] = {0};
 float accerelation = 0;
@@ -310,16 +310,14 @@ int main(void)
 		{
 			DynamixelProtocal2(MainMemory, 1, inputChar, &UART2);
 		}
-		if(Connect == 1){
-			findingPosition();
-			gotoSethome();
-			if (micros() - Timestamp >= dt){
-				Timestamp = micros();
-				trajectory(Timestamp);
-				kalman();
-			}
-			UARTTxDumpBuffer(&UART2);
+		findingPosition();
+		gotoSethome();
+		if (micros() - Timestamp >= dt){
+			Timestamp = micros();
+			trajectory(Timestamp);
+			kalman();
 		}
+		UARTTxDumpBuffer(&UART2);
 	}
 	/* USER CODE END 3 */
 }
@@ -923,7 +921,8 @@ void DynamixelProtocal2(uint8_t *Memory, uint8_t MotorID, int16_t dataIn,
 
 		case S_Frame2_DataFrame_Mode5_2:
 			DATAFRAME[CollectedData] = dataIn &0xff;
-			finalAngle = (Pos_Data << 8) | DATAFRAME[CollectedData];
+			finalAngle = (finalAngle << 8) | DATAFRAME[CollectedData];
+//			finalAngle = (Pos_Data << 8) | DATAFRAME[CollectedData];
 			CollectedData++;
 			State = S_Checksum2 ;
 			break;
@@ -933,9 +932,9 @@ void DynamixelProtocal2(uint8_t *Memory, uint8_t MotorID, int16_t dataIn,
 			C_Station = STATION;
 			DATA = (STATION) &0xff;
 			if(DATA % 2 == 0) 				//EVEN
-			{
+					{
 				DATA_Byte = (DATA/2);
-			}
+					}
 			else							//odd
 			{
 				DATA_Byte = (DATA+1)/2;
@@ -1285,9 +1284,6 @@ void trajectory(uint64_t Timestamp){
 			velocity = 0;
 			stopTime = Timestamp;
 			DynamixelProtocal2(MainMemory, 1,999, &UART2);
-			if(Gripper == 1){
-				I2Con();
-			}
 		}
 	}
 	rawPosition[1] = rawPosition[0];
